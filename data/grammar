@@ -1,0 +1,60 @@
+Exactly {i} of the {j} {role} {position} are {name}'s neighbors         # Only one == Exactly n ?
+Only {i} of the {j} {role} {position} is {name}'s neighbor              # 'Exactly' et 'only' inutile ?
+Only {i} of the {j} {role} {position} is my neighbor
+Only {i} of the {j} {role} {position} is {position}
+Exactly {i} of {name}'s {i} {role} neighbors also neighbor {name}
+
+Exactly {i} of the {j} {role} {position} are {position}
+Exactly {i} {role} {position} is {position}
+
+{name} is one of {i} {role} {position}
+{name} is one of {name}'s {i} {role} neighbors
+{name} has exactly {i} {role} neighbors
+{name} is the only person {position} with {i} {role} neighbor
+
+There are exactly {i} {role} {position}
+There are {i} {role} {position}
+There is only {i} {role} {position}
+There are at least {i} {role} {position}
+
+
+# axiss
+Each {axis} has at least {i} {role}
+Only {i} {axis} has exactly {i} {role}
+{axis} {i} is the only {axis} with exactly {i} {role}
+
+# More/Less
+There are {moreless} {role} in {axis} {n} than {axis} {n}
+There's an equal number of {role} in {axis} {i} and {j}
+{name} has {i} {moreless} {role} neighbor than {name}
+
+# Even/odd
+An {evenodd} number of {role} {position} neighbor {name}
+There's an {evenodd} number of {role} {position}
+
+# Connected
+All {role} {position} are connected
+Both {role} {position} are connected
+
+# in common
+{name} and {name} have only {i} {role} neighbor in common                 # Only one == Exactly n ?
+{name} and {name} have {i} {role} neighbors in common                 # i can be no
+
+# profession
+Exactly {i} {profession} has a(n) {role} directly to the {side} of the them
+There are {moreless} {role} {profession} than {role} {profession}               # can have 'us' {role} {profession}
+There are as many {role} {profession} as there are {role} {profession}
+
+
+
+position:
+  in {axis} {n}
+  neighboring {name}
+  on the edges
+  in between {name} and {name}
+  below {name}
+  above {name}
+  to the side of {name}
+  directly
+  in a corner
+
