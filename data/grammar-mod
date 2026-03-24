@@ -1,4 +1,5 @@
-Supress Exactly/Only/us
+Replace Exactly/Only NB by NB
+supress us
 
 BE: "is" | "are"
 
@@ -18,13 +19,20 @@ POS:
 
 NAME_S
 
-?NGH_A: (NAME_S | "my") ("neighbors" | "neighbor")
+NGH:("neighbors" | "neighbor") 
+?NGH_A: (NAME_S | "my") NGH
 
 ROLE: "innocent" | "innocents" | "criminal" | "criminals"
 
 SUPER_POS: NGH_A | POS
 
 SUPER_NB: NB_NO | NB "of the" NB
+
+THERE: "There is" | "There's" | "There are"
+
+AXIS: "Row" | "Column"
+
+COORD: /[1-5]/ | /[A-D/]
 
 
 // =============================================
@@ -35,19 +43,17 @@ NB of NAME_S NB ROLE neighbors also neighbor NAME
 
 NAME is one of NB ROLE POS
 NAME is one of NAME_S NB ROLE neighbors
-NAME has exactly NB ROLE neighbors
-NAME is the only person POS with NB ROLE neighbor
+NAME has NB ROLE NGH
+NAME is the only person POS with NB ROLE NGH
 
-There are exactly NB ROLE POS
-There are NB ROLE POS
-There is only NB ROLE POS
-There are at least NB ROLE POS
+THERE NB ROLE POS
+THERE at least NB ROLE POS
 
 
 # axiss
-Each {axis} has at least NB ROLE
-Only NB {axis} has exactly NB ROLE
-{axis} NB is the only {axis} with exactly NB ROLE
+Each AXIS has at least NB ROLE
+one AXIS has NB ROLE
+AXIS COORD is the only AXIS with NB ROLE
 
 # More/Less
 There are {moreless} ROLE in {axis} {n} than {axis} {n}
