@@ -6,16 +6,17 @@ BE: "is" | "are"
 NB: /[1-9]+/
 NB_NO: NB | "no"
 
-POS:
-  in {axis} {n}
-  neighboring NAME
-  on the edges
-  in between NAME and NAME
-  below NAME
-  above NAME
-  to the side of NAME
-  directly
-  in a corner
+SIDE: "left" | "right"
+
+POS: in {axis} {n}
+  | "neighboring" NAME
+  | "on the edges"
+  | "in a corner"
+  | "in between" NAME "and" NAME
+  | "below" NAME
+  | "above" NAME
+  | "to the" SIDE "of" NAME
+  | directly
 
 NAME_S
 
@@ -34,6 +35,12 @@ AXIS: "Row" | "Column"
 
 COORD: /[1-5]/ | /[A-D/]
 
+PARITY: "even" | "odd"
+
+COMP: "more" | "less"
+
+JOB: "teacher"
+
 
 // =============================================
 
@@ -49,33 +56,22 @@ NAME is the only person POS with NB ROLE NGH
 THERE NB ROLE POS
 THERE at least NB ROLE POS
 
-
-# axiss
 Each AXIS has at least NB ROLE
-one AXIS has NB ROLE
+Only one AXIS has NB ROLE
 AXIS COORD is the only AXIS with NB ROLE
 
-# More/Less
-There are {moreless} ROLE in {axis} {n} than {axis} {n}
-There's an equal number of ROLE in {axis} NB and NB
-NAME has NB {moreless} ROLE neighbor than NAME
+There are COMP ROLE in AXIS COORD than AXIS COORD
+There's an equal number of ROLE in AXIS NB and NB
+NAME has NB COMP ROLE neighbor than NAME
 
-# Even/odd
-An {evenodd} number of ROLE POS neighbor NAME
-There's an {evenodd} number of ROLE POS
+An PARITY number of ROLE POS neighbor NAME
+There's an PARITY number of ROLE POS
 
-# Connected
 All ROLE POS are connected
 Both ROLE POS are connected
 
-# in common
-NAME and NAME have only NB ROLE neighbor in common                 # Only one == Exactly n ?
-NAME and NAME have NB ROLE neighbors in common                 # i can be no
+NAME and NAME have NB_NO ROLE NGH in common
 
-# profession
-Exactly NB {profession} has a(n) ROLE directly to the {side} of the them
-There are {moreless} ROLE {profession} than ROLE {profession}               # can have 'us' ROLE {profession}
-There are as many ROLE {profession} as there are ROLE {profession}
-
-
-
+NB JOB has a(n) ROLE directly to the SIDE of them
+There are COMP ROLE JOB than ROLE JOB
+There are as many ROLE JOB as there are ROLE JOB
