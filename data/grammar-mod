@@ -1,0 +1,75 @@
+Supress Exactly/Only/us
+
+BE: "is" | "are"
+
+NB: /[1-9]+/
+NB_NO: NB | "no"
+
+POS:
+  in {axis} {n}
+  neighboring NAME
+  on the edges
+  in between NAME and NAME
+  below NAME
+  above NAME
+  to the side of NAME
+  directly
+  in a corner
+
+NAME_S
+
+?NGH_A: (NAME_S | "my") ("neighbors" | "neighbor")
+
+ROLE: "innocent" | "innocents" | "criminal" | "criminals"
+
+SUPER_POS: NGH_A | POS
+
+SUPER_NB: NB_NO | NB "of the" NB
+
+
+// =============================================
+
+
+SUPER_NB ROLE POS BE SUPER_POS
+NB of NAME_S NB ROLE neighbors also neighbor NAME
+
+NAME is one of NB ROLE POS
+NAME is one of NAME_S NB ROLE neighbors
+NAME has exactly NB ROLE neighbors
+NAME is the only person POS with NB ROLE neighbor
+
+There are exactly NB ROLE POS
+There are NB ROLE POS
+There is only NB ROLE POS
+There are at least NB ROLE POS
+
+
+# axiss
+Each {axis} has at least NB ROLE
+Only NB {axis} has exactly NB ROLE
+{axis} NB is the only {axis} with exactly NB ROLE
+
+# More/Less
+There are {moreless} ROLE in {axis} {n} than {axis} {n}
+There's an equal number of ROLE in {axis} NB and NB
+NAME has NB {moreless} ROLE neighbor than NAME
+
+# Even/odd
+An {evenodd} number of ROLE POS neighbor NAME
+There's an {evenodd} number of ROLE POS
+
+# Connected
+All ROLE POS are connected
+Both ROLE POS are connected
+
+# in common
+NAME and NAME have only NB ROLE neighbor in common                 # Only one == Exactly n ?
+NAME and NAME have NB ROLE neighbors in common                 # i can be no
+
+# profession
+Exactly NB {profession} has a(n) ROLE directly to the {side} of the them
+There are {moreless} ROLE {profession} than ROLE {profession}               # can have 'us' ROLE {profession}
+There are as many ROLE {profession} as there are ROLE {profession}
+
+
+
