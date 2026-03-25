@@ -9,7 +9,6 @@ NAME_S: "Alice's"
 
 NB: /[1-9]+/
 NB_NO: NB | "no"
-SUPER_NB: NB_NO | NB "of the" NB
 
 
 POS: in AXIS COORD
@@ -47,7 +46,8 @@ A: "a" | "an"
 // =============================================
 
 
-SUPER_NB ROLE POS BE SUPER_POS
+NB "of the" NB ROLE POS BE SUPER_POS
+NB_NO ROLE POS BE SUPER_POS
 NB of NAME_S NB ROLE neighbors also neighbor NAME
 
 NAME is one of NB ROLE POS
