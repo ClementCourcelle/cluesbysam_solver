@@ -6,14 +6,6 @@ predicat = position : population
 	population = nombres de roles
 lambda = var -> f(var)
 list = \[ \]
-
-### population operation
-
-| = or operation
-& = and operation
-### position operation
-
-$\cap$ = inter operation
 ### predicat operation
 
 (min, max, lambda) => RANGE => \[ res, res, ..., res\]
@@ -22,11 +14,21 @@ $\cap$ = inter operation
 	\[ PICK(axis, 1) : nb r ,PICK(axis, 2) : nb r ,PICK(axis,3) : nb r\]
 
 list(objet) => AND => combinaison_objet
-\[o, o, ..., o\] => AND => o & o & ... & o
+	\[o, o, ..., o\] => AND => o & o & ... & o
 
 list(objet) => OR => combinaison_objet
-\[o, o, ..., o\] => OR => o | o | ... | o
+	\[o, o, ..., o\] => OR => o | o | ... | o
+| = or operation
+& = and operation
 
+### shared operation
+
+NOT(position) => inverse de la position
+NOT(population) => predicat d'absence
+### position operation
+
+$\cap$ = inter operation
+$-$ = minus operation
 ### type operation
 
 MIN(type) => min value
@@ -35,9 +37,11 @@ CARD(type) => nb values
 SET(type) => all values
 PICK(type, a) => take only the a-ieme value
 
+### alias
+
 ALL(type, lambda) = AND(RANGE(MIN(type), MAX(type), lambda))
 ANY(type, lambda) = OR(RANGE(MIN(type), MAX(type), lambda))
-NOT(population)
+
 
 |          | NB ...                                                                 |
 | -------- | ---------------------------------------------------------------------- |
@@ -73,12 +77,12 @@ NOT(population)
 | [[TD_1]] | Each axis=AXIS has at least nb=NB r=ROLE                             |
 |          | ALL(axis, a -> OR(RANGE(nb, CARD(axis), b -> PICK(axis, a) : b r ))) |
 | [[TD_2]] | Only one axis=AXIS has nb=NB r=ROLE                                  |
-|          | ANY(axis, a -> PICK(axis, a) : nb r & SET(axis) - a : NOT(nb r))     |
+|          | ANY(axis, a -> PICK(axis, a) : nb r & SET(axis) - a !: nb r)         |
 | [[TD_3]] | axis=AXIS c=COORD is the only AXIS with nb=NB r=ROLE                 |
-|          | PICK(axis, c) : nb r<br>SET(axis) - c : NOT(nb r)                    |
+|          | PICK(axis, c) : nb r<br>SET(axis) - c !: nb r                        |
+| [[TD_4]] | AXIS COORD has COMP ROLE than any other AXIS                         |
+|          |                                                                      |
 
-
-AXIS COORD has COMP ROLE than any other AXIS
 
 There are COMP ROLE in AXIS COORD than AXIS COORD
 There's an equal number of ROLE in AXIS COORD and COORD
