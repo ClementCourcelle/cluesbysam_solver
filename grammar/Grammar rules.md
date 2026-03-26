@@ -40,4 +40,5 @@ NB JOB has A ROLE directly to the SIDE of them
 There are COMP ROLE JOB than ROLE JOB
 There are as many ROLE JOB as there are ROLE JOB
 
+NB of NAMES_S NGH POS BE ROLE
 
