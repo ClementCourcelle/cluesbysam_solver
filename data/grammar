@@ -1,3 +1,4 @@
+tout mettre en minuscule
 Replace Exactly/Only NB by NB
 supress us
 
@@ -49,6 +50,7 @@ A: "a" | "an"
 NB "of the" NB ROLE POS BE SUPER_POS
 NB_NO ROLE POS BE SUPER_POS
 NB of NAME_S NB ROLE neighbors also neighbor NAME
+NB of NAMES_S NGH POS BE ROLE
 
 NAME is one of NB ROLE POS
 NAME is one of NAME_S NB ROLE neighbors
@@ -80,4 +82,3 @@ NB JOB has A ROLE directly to the SIDE of them
 There are COMP ROLE JOB than ROLE JOB
 There are as many ROLE JOB as there are ROLE JOB
 
-NB of NAMES_S NGH POS BE ROLE
