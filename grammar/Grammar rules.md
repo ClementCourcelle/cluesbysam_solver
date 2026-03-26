@@ -1,29 +1,50 @@
+predicat P = position : population
+lambda = var -> f(var)
 
-|                 | PARSED                                                                 | MATHS                                         |
-| --------------- | ---------------------------------------------------------------------- | --------------------------------------------- |
-| [[T1.md\|T1]]   | nb1=NB "of the" nb2=NB r=ROLE pos1=POS BE pos2=SUPER_POS               | pos1 $\cap$ pos2 : nb1 r<br>pos1 : nb2 r      |
-| [[T2.md\|T2]]   | nb1=NB_NO r=ROLE pos1=POS BE pos2=SUPER_POS                            | pos1 $\cap$ pos2 : nb1 r                      |
-| [[T3.md\|T3]]   | nb=NB of name1=NAME_S nb2=NB r=ROLE neighbors also neighbor name2=NAME | NGH(name1) $\cap$ NGH(name2) : nb r           |
-| [[T4.md\|T4]]   | name=NAME is one of nb=NB r=ROLE pos=POS                               | name : r<br>pos : nb r                        |
-| [[T5.md\|T5]]   | name1=NAME is one of name2=NAME_S nb=NB r=ROLE neighbors               | name1 : r<br>NGH(name2) : nb r                |
-| [[T6.md\|T6]]   | name=NAME has nb=NB r=ROLE NGH                                         | NGH(name) : nb r                              |
-| [[T7.md\|T7]]   | name=NAME is the only person pos=POS with nb=NB r=ROLE NGH             | NGH(name) : nb r<br>NGH(pos $-$ name) !: nb r |
-| [[T8.md\|T8]]   | THERE nb=NB r=ROLE pos=POS                                             | pos : nb r                                    |
-| [[T9.md\|T9]]   | THERE at least nb=NB r=ROLE pos=POS                                    | pos : OR(SLICE(nb, $\Omega$(pos)) r)          |
-| [[T10.md\|T10]] | Each axis=AXIS has at least nb=NB r=ROLE                               | AXIS(ALL) : OR(SLICE(nb, $\Omega$(axis)) r)   |
-| [[T11.md\|T11]] | Only one AXIS has NB ROLE                                              |                                               |
+(min, max, lambda) => RANGE => \[ res, res, ..., res\]
+(MIN(axis), MAX(axis), a -> PICK(axis, a) : nb r ) 
+	=> RANGE => \[ PICK(axis, 1) : nb r ,PICK(axis, 2) : nb r ,PICK(axis,3) : nb r\]
+
+list(objet) => AND => combinaison_objet
+\[o, o, ..., o\] => AND => o & o & ... & o
+
+list(objet) => OR => combinaison_objet
+\[o, o, ..., o\] => OR => o | o | ... | o
+
+MIN(type) => min value
+MAX(type) => max value
+CARD(type) => nb values
+SET(type) => all values
+PICK(type, a) => take only the a-ieme value
+
+ALL(type, lambda) = AND(RANGE(MIN(type), MAX(type), lambda))
+ANY(type, lambda) = OR(RANGE(MIN(type), MAX(type), lambda))
+
+|                 | PARSED                                                                 | MATHS                                                                |
+| --------------- | ---------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| [[T1.md\|T1]]   | nb1=NB "of the" nb2=NB r=ROLE pos1=POS BE pos2=SUPER_POS               | pos1 $\cap$ pos2 : nb1 r<br>pos1 : nb2 r                             |
+| [[T2.md\|T2]]   | nb1=NB_NO r=ROLE pos1=POS BE pos2=SUPER_POS                            | pos1 $\cap$ pos2 : nb1 r                                             |
+| [[T3.md\|T3]]   | nb=NB of name1=NAME_S nb2=NB r=ROLE neighbors also neighbor name2=NAME | NGH(name1) $\cap$ NGH(name2) : nb r                                  |
+| [[T4.md\|T4]]   | name=NAME is one of nb=NB r=ROLE pos=POS                               | name : r<br>pos : nb r                                               |
+| [[T5.md\|T5]]   | name1=NAME is one of name2=NAME_S nb=NB r=ROLE neighbors               | name1 : r<br>NGH(name2) : nb r                                       |
+| [[T6.md\|T6]]   | name=NAME has nb=NB r=ROLE NGH                                         | NGH(name) : nb r                                                     |
+| [[T7.md\|T7]]   | name=NAME is the only person pos=POS with nb=NB r=ROLE NGH             | NGH(name) : nb r<br>NGH(pos $-$ name) : NOT(nb r)                    |
+| [[T8.md\|T8]]   | THERE nb=NB r=ROLE pos=POS                                             | pos : nb r                                                           |
+| [[T9.md\|T9]]   | THERE at least nb=NB r=ROLE pos=POS                                    | OR(RANGE(nb, CARD(pos), a -> pos : a r)))                            |
+| [[T10.md\|T10]] | Each axis=AXIS has at least nb=NB r=ROLE                               | ALL(axis, a -> OR(RANGE(nb, CARD(axis), b -> PICK(axis, a) : b r ))) |
+| [[T11.md\|T11]] | Only one axis=AXIS has nb=NB r=ROLE                                    | ANY(axis, a -> PICK(axis, a) : nb r & SET(axis) - a : NOT(nb r))     |
+| [[T12.md\|T12]] | axis=AXIS c=COORD is the only AXIS with nb=NB r=ROLE                   | PICK(axis, c) : nb r<br>SET(axis) - c : NOT(nb r)                    |
+|                 |                                                                        |                                                                      |
+
+
+NB of NAMES_S NGH POS BE ROLE
 
 
 
-
-
-AXIS COORD is the only AXIS with NB ROLE
 AXIS COORD has COMP ROLE than any other AXIS
 
 There are COMP ROLE in AXIS COORD than AXIS COORD
 There's an equal number of ROLE in AXIS COORD and COORD
-
-====================
 
 NAME has NB COMP ROLE neighbor than NAME
 
@@ -40,5 +61,5 @@ NB JOB has A ROLE directly to the SIDE of them
 There are COMP ROLE JOB than ROLE JOB
 There are as many ROLE JOB as there are ROLE JOB
 
-NB of NAMES_S NGH POS BE ROLE
+
 
