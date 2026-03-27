@@ -98,7 +98,8 @@ Both ROLE POS are connected
 
 NAME and NAME have NB_NO ROLE NGH in common
 
-NB JOB has A ROLE directly to the SIDE of them
+NB JOB has A ROLE directly DIR them
+NB of the NB JOB has A ROLE directly DIR them
 There are COMP ROLE JOB than ROLE JOB
 There are as many ROLE JOB as there are ROLE JOB
 
