@@ -1,2 +1,3 @@
 /target
-**/.obsidian/
+.obsidian/
+__pycache__/
