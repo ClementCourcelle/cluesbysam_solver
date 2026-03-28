@@ -1,5 +1,5 @@
 
-| NAME  | "is the only person" | POS          | "with" | NB  | ROLE     | NGH       |
+| NAME  | "is the only person" | pos          | "with" | NB  | role     | ngh       |
 | ----- | -------------------- | ------------ | ------ | --- | -------- | --------- |
 | Alice | is the only person   | on the edges | with   | 3   | innocent | neighbors |
 

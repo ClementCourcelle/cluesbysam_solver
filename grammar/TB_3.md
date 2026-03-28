@@ -1,3 +1,3 @@
-| NAME  | has | NB  | ROLE     | NGH       |
-| ----- | --- | --- | -------- | --------- |
-| Alice | has | 3   | innocent | neighbors |
+| NAME  | "has" | NB  | role     | ngh       |
+| ----- | ----- | --- | -------- | --------- |
+| Alice | has   | 3   | innocent | neighbors |

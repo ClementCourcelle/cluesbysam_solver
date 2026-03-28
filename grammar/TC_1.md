@@ -1,6 +1,5 @@
 
-| THERE     | NB  | ROLE     | POS                         |
+| there     | NB  | role     | pos                         |
 | --------- | --- | -------- | --------------------------- |
 | There is  | 1   | innocent | above Alice                 |
-| there are | 2   | innocent | in between alice and donald |
-| there are | 2   | innocent | in between alice and donald |
+| there are | exactly 2 | innocents | in between alice and donald |

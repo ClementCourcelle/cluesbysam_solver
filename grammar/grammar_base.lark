@@ -1,0 +1,45 @@
+// =================== Sub-rules ===================
+
+pos: "in" AXIS COORD                        -> in_axis
+   | "neighboring" NAME                     -> neighboring_name
+   | "on the edges"                         -> on_the_edges
+   | "in a corner"                          -> in_a_corner
+   | "in between" NAME "and" NAME           -> in_between_names
+   | dir NAME                               -> dir_of_name
+
+super_pos: ngh_a | pos
+
+ngh: "neighbor" | "neighbors"
+ngh_a: NAME_S ngh | "my" ngh
+
+role: "innocent" | "innocents" | "criminal" | "criminals"
+
+be: "is" | "are"
+
+there: "there is" | "there are" | "there's"
+
+has: "has" | "have"
+
+nb_no: NB  -> nb
+      | "no" -> no
+
+dir: "above"                    -> above
+   | "below"                    -> below
+   | "to the" SIDE "of"         -> to_side_of
+
+// JOB is injected at runtime — see load_parser() in main.py
+job: JOB
+
+a_det: "a" | "an"
+
+// =================== Terminals ===================
+// NAME_S and NAME are injected at runtime — see load_parser() in main.py
+
+AXIS: "row" | "column"
+COORD: /[1-5]/ | /[a-d]/
+NB: /(?:exactly\s+|only\s+)?[1-9][0-9]*/
+PARITY: "even" | "odd"
+SIDE: "left" | "right"
+COMP: "more" | "less"
+
+%ignore /\s+/
