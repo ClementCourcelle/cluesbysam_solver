@@ -4,3 +4,6 @@
 | berat | is one of | helen's | 7 | innocent | neighbors |
 | uma | is one of | vince's | 4 | criminal | neighbors |
 | susan | is one of | nick's | 6 | innocent | neighbors |
+| tina | is one of | stella's | 5 | criminal | neighbors |
+| hal | is one of | logan's | 5 | innocent | neighbors |
+| petra | is one of | steve's | 5 | criminal | neighbors |

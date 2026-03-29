@@ -4,3 +4,4 @@
 | Each   | row  | has at least   | 3   | criminals |
 | Each | row | has at least | 2 | innocents |
 | Each | row | has at least | one | innocent |
+| Each | row | has at least | 2 | criminals |

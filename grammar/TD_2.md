@@ -5,3 +5,4 @@
 | Only one | row | has | exactly 2 | criminals |
 | Only one | column | has | exactly 3 | innocents |
 | Only one | column | has | exactly 5 | innocents |
+| Only one | row | has | exactly 2 | innocents |

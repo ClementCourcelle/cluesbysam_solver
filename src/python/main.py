@@ -148,6 +148,8 @@ async def main() -> None:
 
     people = await GS.get_grid_state()
     parser = load_parser([p.name for p in people], [p.profession for p in people])
+    print(f"Loaded: {[p.name for p in people]}")
+    print(f"Jobs:   {sorted({p.profession for p in people})}")
 
     seen_clues: set[str] = set()
     round_num = 0
@@ -173,7 +175,9 @@ async def main() -> None:
             parser = load_parser([p.name for p in people], [p.profession for p in people])
             seen_clues = set()
             round_num = 0
+            professions = sorted({p.profession for p in people})
             print(f"→ Reloaded: {[p.name for p in people]}")
+            print(f"   Jobs: {professions}")
 
     await GS.stop()
 

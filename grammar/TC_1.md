@@ -6,7 +6,10 @@
 | there are | exactly 2 | innocents | to the right of gabe        |
 | there are | exactly 3 | criminals | in column d                 |
 | There is  | only one  | innocent  | in column A                 |
-   
-| there are | exactly 2 | innocents | below jason |
-| there are | exactly 2 | innocents | to the left of paul |
-| there are | exactly 4 | innocents | in column d |
+| there are | exactly 2 | innocents | below jason                 |
+| there are | exactly 2 | innocents | to the left of paul         |
+| there are | exactly 4 | innocents | in column d                 |
+| there are | 6         | innocents | on the edges                |
+| there is  | only one  | innocent  | in row 3                    |
+| there is  | only one  | innocent  | in column b                 |
+| there are | exactly 2 | criminals | to the right of aaron       |

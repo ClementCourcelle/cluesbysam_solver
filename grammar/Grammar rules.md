@@ -101,6 +101,8 @@ ANY(type, lambda) = OR(RANGE(MIN(type), MAX(type), lambda))
 | [[TMP13]] | There are as many role job as there are role job        |
 | [[TMP14]] | "Both" job be role                                      |
 | [[TMP15]] | NAME "has at least" NB role ngh                         |
+| [[TMP16]] | NB "of" NAME_S NB role ngh "also neighbor" NAME         |
 
 ### NO MATCH
+
 
