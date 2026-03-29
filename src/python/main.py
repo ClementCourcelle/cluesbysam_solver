@@ -41,7 +41,9 @@ def build_grammar(person_names: list[str], professions: list[str]) -> str:
     names_lower = [n.lower() for n in person_names]
     names_s = " | ".join(f'"{n}\'s"' for n in names_lower)
     names = " | ".join(f'"{n}"' for n in names_lower)
-    jobs = " | ".join(f'"{p}"' for p in sorted({p.lower() for p in professions}))
+    jobs = " | ".join(
+        f'"{p}" | "{p}s"' for p in sorted({p.lower() for p in professions})
+    )
 
     return "\n".join(
         [
@@ -163,9 +165,15 @@ async def main() -> None:
         else:
             print("\n(no new clues)")
 
-        cmd = input("\nPress Enter to scan again, or 'q' to quit: ").strip().lower()
+        cmd = input("\nEnter to scan, 'r' to reload (new game), 'q' to quit: ").strip().lower()
         if cmd == "q":
             break
+        elif cmd == "r":
+            people = await GS.get_grid_state()
+            parser = load_parser([p.name for p in people], [p.profession for p in people])
+            seen_clues = set()
+            round_num = 0
+            print(f"→ Reloaded: {[p.name for p in people]}")
 
     await GS.stop()
 

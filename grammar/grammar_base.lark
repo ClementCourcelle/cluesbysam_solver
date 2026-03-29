@@ -35,9 +35,9 @@ a_det: "a" | "an"
 // =================== Terminals ===================
 // NAME_S and NAME are injected at runtime — see load_parser() in main.py
 
-AXIS: "row" | "column"
+AXIS: "row" | "rows" | "column" | "columns"
 COORD: /[1-5]/ | /[a-d]/
-NB: /(?:exactly\s+|only\s+)?[1-9][0-9]*/
+NB: /(?:exactly\s+|only\s+)?(?:one|[1-9][0-9]*)/
 PARITY: "even" | "odd"
 SIDE: "left" | "right"
 COMP: "more" | "less"

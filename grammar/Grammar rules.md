@@ -84,7 +84,7 @@ ANY(type, lambda) = OR(RANGE(MIN(type), MAX(type), lambda))
 | [[TD_4]] | AXIS COORD has COMP role than any other AXIS                         |
 |          |                                                                      |
 
-|           | TODO                                                    |
+|           | TMP                                                     |
 | --------- | ------------------------------------------------------- |
 | [[TMP1]]  | There are COMP role in AXIS COORD than AXIS COORD       |
 | [[TMP2]]  | There's an equal number of role in AXIS COORD and COORD |
@@ -99,13 +99,8 @@ ANY(type, lambda) = OR(RANGE(MIN(type), MAX(type), lambda))
 | [[TMP11]] | NB of the NB job has a_det role directly dir them       |
 | [[TMP12]] | There are COMP role job than role job                   |
 | [[TMP13]] | There are as many role job as there are role job        |
+| [[TMP14]] | "Both" job be role                                      |
+| [[TMP15]] | NAME "has at least" NB role ngh                         |
 
-
-
-
-
-
-
-
-
+### NO MATCH
 
