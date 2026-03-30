@@ -7,3 +7,4 @@
 | tina | is one of | stella's | 5 | criminal | neighbors |
 | hal | is one of | logan's | 5 | innocent | neighbors |
 | petra | is one of | steve's | 5 | criminal | neighbors |
+| erwin | is one of | laura's | 7 | criminal | neighbors |

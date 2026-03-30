@@ -104,5 +104,3 @@ ANY(type, lambda) = OR(RANGE(MIN(type), MAX(type), lambda))
 | [[TMP16]] | NB "of" NAME_S NB role ngh "also neighbor" NAME         |
 
 ### NO MATCH
-
-

@@ -9,3 +9,5 @@
 | There are | more | innocents | in | row | 3 | than | row | 4 |
 | There are | more | criminals | in | column | c | than | column | d |
 | There are | more | innocents | in | column | a | than | column | b |
+| There are | more | innocents | in | row | 2 | than | row | 3 |
+| There are | more | criminals | in | row | 2 | than | row | 5 |

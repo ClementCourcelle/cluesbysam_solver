@@ -3,7 +3,7 @@
 pos: "in" AXIS COORD                        -> in_axis
    | "neighboring" NAME                     -> neighboring_name
    | "on the edges"                         -> on_the_edges
-   | "in a corner"                          -> in_a_corner
+   | "in" ("a" | "the") ("corner" | "corners") -> in_a_corner
    | "in between" NAME "and" NAME           -> in_between_names
    | dir NAME                               -> dir_of_name
 
@@ -12,7 +12,7 @@ super_pos: ngh_a | pos
 ngh: "neighbor" | "neighbors"
 ngh_a: NAME_S ngh | "my" ngh
 
-role: "innocent" | "innocents" | "criminal" | "criminals"
+role: ["us"] ("innocent" | "innocents" | "criminal" | "criminals")
 
 be: "is" | "are"
 

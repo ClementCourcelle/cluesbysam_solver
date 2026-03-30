@@ -13,3 +13,9 @@
 | there is  | only one  | innocent  | in row 3                    |
 | there is  | only one  | innocent  | in column b                 |
 | there are | exactly 2 | criminals | to the right of aaron       |
+| there are | exactly 3 | innocents | in row 5 |
+| there are | exactly 2 | innocents | in between anna and paul |
+| there are | exactly 2 | innocents | below mark |
+| there is | only one | innocent | above tina |
+| there is | only one | innocent | above maria |
+| there are | 7 | criminals | on the edges |
