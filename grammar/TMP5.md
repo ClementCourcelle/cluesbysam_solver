@@ -1,4 +1,4 @@
 
-| "An" | PARITY | "number of" | role | pos | "are" | NAME_S | ngh |
-| ---- | ------ | ----------- | ---- | --- | ----- | ------- | --- |
-| An | odd | number of | innocents | in column c | are | gabe's | neighbors |
+| parity_count | "are" | NAME_S | ngh |
+| ------------ | ----- | ------ | --- |
+| an odd number of innocents in column c | are | gabe's | neighbors |

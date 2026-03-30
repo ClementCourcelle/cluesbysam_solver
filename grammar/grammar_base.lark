@@ -1,5 +1,14 @@
 // =================== Sub-rules ===================
 
+// Merge TMP7+TMP8
+ALLBOTH: "all" | "both"
+
+// Common prefix for TMP4, TMP5, TMP6
+parity_count: "an" PARITY "number of" role pos
+
+// Optional "of the N" filter, used to merge TMP10+TMP11
+nb_with_opt_filter: NB ["of the" NB]
+
 pos: "in" AXIS COORD                        -> in_axis
    | "neighboring" NAME                     -> neighboring_name
    | "on the edges"                         -> on_the_edges

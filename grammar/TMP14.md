@@ -1,4 +1,4 @@
 
-| "Both" | job     | be  | role     |
-| ------ | ------- | --- | -------- |
-| Both   | singers | are | innocent |
+| ALLBOTH | job     | be  | role     |
+| ------- | ------- | --- | -------- |
+| Both    | singers | are | innocent |

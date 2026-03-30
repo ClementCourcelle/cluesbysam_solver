@@ -89,17 +89,15 @@ ANY(type, lambda) = OR(RANGE(MIN(type), MAX(type), lambda))
 | [[TMP1]]  | There are COMP role in AXIS COORD than AXIS COORD       |
 | [[TMP2]]  | There's an equal number of role in AXIS COORD and COORD |
 | [[TMP3]]  | NAME has NB COMP role neighbor than NAME                |
-| [[TMP4]]  | An PARITY number of role pos neighbor NAME              |
-| [[TMP5]]  | An PARITY number of role pos are NAME_S ngh             |
-| [[TMP6]]  | There's an PARITY number of role pos                    |
-| [[TMP7]]  | All role pos are connected                              |
-| [[TMP8]]  | Both role pos are connected                             |
+| [[TMP4]]  | parity_count neighbor NAME                              |
+| [[TMP5]]  | parity_count are NAME_S ngh                             |
+| [[TMP6]]  | there parity_count                                      |
+| [[TMP7]]  | ALLBOTH role pos are connected                          |
 | [[TMP9]]  | NAME and NAME have nb_no role ngh in common             |
-| [[TMP10]] | NB job has a_det role directly dir them                 |
-| [[TMP11]] | NB of the NB job has a_det role directly dir them       |
+| [[TMP10]] | nb_with_opt_filter job has a_det role directly dir them |
 | [[TMP12]] | There are COMP role job than role job                   |
 | [[TMP13]] | There are as many role job as there are role job        |
-| [[TMP14]] | "Both" job be role                                      |
+| [[TMP14]] | ALLBOTH job be role                                     |
 | [[TMP15]] | NAME "has at least" NB role ngh                         |
 | [[TMP16]] | NB "of" NAME_S NB role ngh "also neighbor" NAME         |
 
