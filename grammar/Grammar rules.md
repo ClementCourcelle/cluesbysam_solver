@@ -9,10 +9,10 @@ lambda = var -> f(var)
 list = \[ \]
 ### predicat operation
 
-(min, max, lambda) => RANGE => \[ res, res, ..., res\]
-	(MIN(axis), MAX(axis), a -> PICK(axis, a) : nb r ) 
-	=> RANGE =>
-	\[ PICK(axis, 1) : nb r ,PICK(axis, 2) : nb r ,PICK(axis,3) : nb r\]
+(min, max) => RANGE => \[ min ... max\]
+	(MIN(axis), MAX(axis))	=> RANGE =>	\[1, 2, 3, 4, 5\]
+
+(list, lambda) => MAP => \[ res, res, ..., res \] 
 
 list(objet) => AND => combinaison_objet
 	\[o, o, ..., o\] => AND => o & o & ... & o
