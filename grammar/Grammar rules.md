@@ -52,8 +52,8 @@ ANY(type, lambda) = OR(MAP(RANGE(MIN(type), MAX(type)), lambda))
 |          | pos1 $\cap$ pos2 : nb1 r                                               |
 | [[TA_3]] | nb=NB of name1=NAME_S nb2=NB r=role neighbors also neighbor name2=NAME |
 |          | NGH(name1) $\cap$ NGH(name2) : nb r                                    |
-| [[TA_4]] | NB of NAME_S ngh pos be role                                           |
-|          |                                                                        |
+| [[TA_4]] | nb=NB of name=NAME_S ngh pos=pos be r=role                             |
+|          | NGH(name) $\cap$ pos : nb r                                            |
 
 |          | NAME ...                                                   |
 | -------- | ---------------------------------------------------------- |
@@ -73,32 +73,35 @@ ANY(type, lambda) = OR(MAP(RANGE(MIN(type), MAX(type)), lambda))
 | [[TC_2]] | there at least nb=NB r=role pos=pos            |
 |          | OR(MAP(RANGE(nb, CARD(pos)), a -> pos : a r))) |
 
-|          | MISC                                                                      |
-| -------- | ------------------------------------------------------------------------- |
-| [[TD_1]] | Each axis=AXIS has at least nb=NB r=role                                  |
-|          | ALL(axis, a -> OR(MAP(RANGE(nb, CARD(axis)), b -> PICK(axis, a) : b r ))) |
-| [[TD_2]] | Only one axis=AXIS has nb=NB r=role                                       |
-|          | ANY(axis, a -> PICK(axis, a) : nb r & SET(axis) - a !: nb r)              |
-| [[TD_3]] | axis=AXIS c=COORD is the only AXIS with nb=NB r=role                      |
-|          | PICK(axis, c) : nb r<br>SET(axis) - c !: nb r                             |
-| [[TD_4]] | AXIS COORD has COMP role than any other AXIS                              |
-|          |                                                                           |
+|          | MISC                                                                                                                                                                                                                                               |
+| -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [[TD_1]] | Each axis=AXIS has at least nb=NB r=role                                                                                                                                                                                                           |
+|          | ALL(axis, a -> OR(MAP(RANGE(nb, CARD(axis)), b -> PICK(axis, a) : b r )))                                                                                                                                                                          |
+| [[TD_2]] | Only one axis=AXIS has nb=NB r=role                                                                                                                                                                                                                |
+|          | ANY(axis, a -> PICK(axis, a) : nb r & SET(axis) - a !: nb r)                                                                                                                                                                                       |
+| [[TD_3]] | axis=AXIS c=COORD is the only AXIS with nb=NB r=role                                                                                                                                                                                               |
+|          | PICK(axis, c) : nb r<br>SET(axis) - c !: nb r                                                                                                                                                                                                      |
+| [[TD_4]] | axis=AXIS c=COORD has COMP role than any other AXIS                                                                                                                                                                                                |
+|          | OR(MAP(RANGE(1, CARD(AXIS))<br>                  a -> PICK(axis, c) : ar<br>				          & AND(MAP(SET(axis) - c,<br>						                            X -> OR(MAP(RANGE(0, a - 1),<br>													                           b -> X : b r)))))) |
 
-|           | TMP                                                     |
-| --------- | ------------------------------------------------------- |
-| [[TMP1]]  | There are COMP role in AXIS COORD than AXIS COORD       |
-| [[TMP2]]  | There's an equal number of role in AXIS COORD and COORD |
-| [[TMP3]]  | NAME has NB COMP role neighbor than NAME                |
-| [[TMP4]]  | parity_count neighbor NAME                              |
-| [[TMP5]]  | parity_count are NAME_S ngh                             |
-| [[TMP6]]  | there parity_count                                      |
-| [[TMP7]]  | ALLBOTH role pos are connected                          |
-| [[TMP9]]  | NAME and NAME have nb_no role ngh in common             |
-| [[TMP10]] | nb_with_opt_filter job has a_det role directly dir them |
-| [[TMP12]] | There are COMP role job than role job                   |
-| [[TMP13]] | There are as many role job as there are role job        |
-| [[TMP14]] | ALLBOTH job be role                                     |
-| [[TMP15]] | NAME "has at least" NB role ngh                         |
-| [[TMP16]] | NB "of" NAME_S NB role ngh "also neighbor" NAME         |
+|           | TMP                                                                                                                                                                                |
+| --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [[TMP1]]  | There are COMP r=role in axis=AXIS c1=COORD than AXIS c2=COORD                                                                                                                     |
+|           | OR(MAP(RANGE(1, CARD(axis)),<br>                  a -> PICK(axis, c) : a r<br>				          & OR(MAP(RANGE(0, a - 1)),<br>						                        b -> PICK(axis, c2): br))) |
+| [[TMP2]]  | There's an equal number of role in AXIS COORD and COORD                                                                                                                            |
+|           | OR(MAP(RANGE(0, CARD(Axis)),<br>                   a -> PICK(axis, c1): a r & PICK(axis, c2): ar))                                                                                 |
+| [[TMP3]]  | name1=NAME has nb=NB COMP r=role neighbor than name2=NAME                                                                                                                          |
+|           | OR(MAP(RANGE(0, CARD(NGH) - nb),<br>                  a -> name1 : a + nb : r & name2 : nb r))                                                                                     |
+| [[TMP4]]  | parity_count neighbor NAME                                                                                                                                                         |
+| [[TMP5]]  | parity_count are NAME_S ngh                                                                                                                                                        |
+| [[TMP6]]  | there parity_count                                                                                                                                                                 |
+| [[TMP7]]  | ALLBOTH role pos are connected                                                                                                                                                     |
+| [[TMP9]]  | NAME and NAME have nb_no role ngh in common                                                                                                                                        |
+| [[TMP10]] | nb_with_opt_filter job has a_det role directly dir them                                                                                                                            |
+| [[TMP12]] | There are COMP role job than role job                                                                                                                                              |
+| [[TMP13]] | There are as many role job as there are role job                                                                                                                                   |
+| [[TMP14]] | ALLBOTH job be role                                                                                                                                                                |
+| [[TMP15]] | NAME "has at least" NB role ngh                                                                                                                                                    |
+| [[TMP16]] | NB "of" NAME_S NB role ngh "also neighbor" NAME                                                                                                                                    |
 
 ### NO MATCH
