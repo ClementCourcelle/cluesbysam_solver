@@ -40,8 +40,8 @@ PICK(type, a) => take only the a-ieme value
 
 ### alias
 
-ALL(type, lambda) = AND(RANGE(MIN(type), MAX(type), lambda))
-ANY(type, lambda) = OR(RANGE(MIN(type), MAX(type), lambda))
+ALL(type, lambda) = AND(MAP(RANGE(MIN(type), MAX(type)), lambda))
+ANY(type, lambda) = OR(MAP(RANGE(MIN(type), MAX(type)), lambda))
 
 
 |          | NB ...                                                                 |
@@ -66,23 +66,23 @@ ANY(type, lambda) = OR(RANGE(MIN(type), MAX(type), lambda))
 | [[TB_4]] | name=NAME is the only person pos=pos with nb=NB r=role ngh |
 |          | NGH(name) : nb r<br>NGH(pos $-$ name) : NOT(nb r)          |
 
-|          | THERE ...                                 |
-| -------- | ----------------------------------------- |
-| [[TC_1]] | there nb=NB r=role pos=pos                |
-|          | pos : nb r                                |
-| [[TC_2]] | there at least nb=NB r=role pos=pos       |
-|          | OR(RANGE(nb, CARD(pos), a -> pos : a r))) |
+|          | THERE ...                                      |
+| -------- | ---------------------------------------------- |
+| [[TC_1]] | there nb=NB r=role pos=pos                     |
+|          | pos : nb r                                     |
+| [[TC_2]] | there at least nb=NB r=role pos=pos            |
+|          | OR(MAP(RANGE(nb, CARD(pos)), a -> pos : a r))) |
 
-|          | MISC                                                                 |
-| -------- | -------------------------------------------------------------------- |
-| [[TD_1]] | Each axis=AXIS has at least nb=NB r=role                             |
-|          | ALL(axis, a -> OR(RANGE(nb, CARD(axis), b -> PICK(axis, a) : b r ))) |
-| [[TD_2]] | Only one axis=AXIS has nb=NB r=role                                  |
-|          | ANY(axis, a -> PICK(axis, a) : nb r & SET(axis) - a !: nb r)         |
-| [[TD_3]] | axis=AXIS c=COORD is the only AXIS with nb=NB r=role                 |
-|          | PICK(axis, c) : nb r<br>SET(axis) - c !: nb r                        |
-| [[TD_4]] | AXIS COORD has COMP role than any other AXIS                         |
-|          |                                                                      |
+|          | MISC                                                                      |
+| -------- | ------------------------------------------------------------------------- |
+| [[TD_1]] | Each axis=AXIS has at least nb=NB r=role                                  |
+|          | ALL(axis, a -> OR(MAP(RANGE(nb, CARD(axis)), b -> PICK(axis, a) : b r ))) |
+| [[TD_2]] | Only one axis=AXIS has nb=NB r=role                                       |
+|          | ANY(axis, a -> PICK(axis, a) : nb r & SET(axis) - a !: nb r)              |
+| [[TD_3]] | axis=AXIS c=COORD is the only AXIS with nb=NB r=role                      |
+|          | PICK(axis, c) : nb r<br>SET(axis) - c !: nb r                             |
+| [[TD_4]] | AXIS COORD has COMP role than any other AXIS                              |
+|          |                                                                           |
 
 |           | TMP                                                     |
 | --------- | ------------------------------------------------------- |
