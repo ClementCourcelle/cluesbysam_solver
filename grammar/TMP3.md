@@ -1,4 +1,4 @@
 
-| NAME | "has" | NB | COMP | role | "neighbor than" | NAME |
-| ---- | ----- | -- | ---- | ---- | --------------- | ---- |
-| freya | has | one | more | innocent | neighbor than | olof |
+| NAME  | "has" | NB  | COMP | role     | "neighbor than" | NAME |
+| ----- | ----- | --- | ---- | -------- | --------------- | ---- |
+| freya | has   | one | more | innocent | neighbor than   | olof |

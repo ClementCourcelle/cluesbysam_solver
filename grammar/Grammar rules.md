@@ -93,7 +93,7 @@ ANY(type, lambda) = OR(MAP(RANGE(MIN(type), MAX(type)), lambda))
 | [[TMP2]]  | There's an equal number of r=role in AXIS c1=COORD and c2=COORD                                                                                      |
 |           | OR(MAP(RANGE(0, CARD(Axis)), nb -><br>    PICK(axis, c1): nb r <br>	&<br>	PICK(axis, c2): nb r<br>))                                                 |
 | [[TMP3]]  | name1=NAME has nb=NB COMP r=role neighbor than name2=NAME                                                                                            |
-|           | OR(MAP(RANGE(0, CARD(NGH) - nb), a -> <br>    name1 : a + nb : r & name2 : nb r<br>))                                                                |
+|           | OR(MAP(RANGE(0, CARD(NGH) - nb), a -> <br>    name1 : (a + nb) r <br>	&<br>	name2 : nb r<br>))                                                       |
 | [[TMP4]]  | parity_count neighbor NAME                                                                                                                           |
 | [[TMP5]]  | parity_count are NAME_S ngh                                                                                                                          |
 | [[TMP6]]  | there parity_count                                                                                                                                   |
