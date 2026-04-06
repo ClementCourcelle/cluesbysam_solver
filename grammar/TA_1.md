@@ -23,3 +23,6 @@
 | exactly 2 | of the | 6 | criminals | neighboring ivan | are | in row 3 |
 | only 1 | of the | 4 | criminals | neighboring gary | is | to the right of amy |
 | only 1 | of the | 5 | criminals | neighboring hilda | is | in column b |
+| exactly 2 | of the | 5 | criminals | on the edges | are | in column c |
+| only 1 | of the | 2 | criminals | neighboring hope | is | above zane |
+| only 1 | of the | 2 | criminals | neighboring mark | is | in column d |

@@ -19,3 +19,8 @@
 | there is | only one | innocent | above tina |
 | there is | only one | innocent | above maria |
 | there are | 7 | criminals | on the edges |
+| there are | exactly 2 | innocents | above uma |
+| there are | exactly 3 | criminals | in column a |
+| there is | only one | innocent | in row 1 |
+| there are | exactly 3 | innocents | above uma |
+| there are | exactly 3 | criminals | in column c |

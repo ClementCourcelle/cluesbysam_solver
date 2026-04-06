@@ -9,3 +9,5 @@
 | vince | is one of | 7 | innocents | on the edges |
 | avva | is one of | 10 | criminals | on the edges |
 | wanda | is one of | 7 | innocents | on the edges |
+| freya | is one of | 3 | criminals | below barb |
+| anna | is one of | 3 | innocents | in column a |

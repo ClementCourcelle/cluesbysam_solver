@@ -10,3 +10,9 @@
 | exactly 1 | innocent | in row 3 | is | on the edges |
 | exactly 1 | innocent | in row 3 | is | neighboring raul |
 | exactly 1 | criminal | to the right of vince | is | neighboring xavi |
+| exactly 1 | innocent | in column c | is | neighboring freya |
+| exactly 2 | innocents | in column b | are | neighboring logan |
+| exactly 1 | innocent | in row 4 | is | neighboring uma |
+| exactly 1 | innocent | in row 5 | is | in column b |
+| exactly 1 | innocent | in column c | is | neighboring max |
+| exactly 1 | innocent | above tom | is | neighboring mark |

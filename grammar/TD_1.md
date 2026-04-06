@@ -8,3 +8,5 @@
 | Each | column | has at least | one | criminal |
 | Each | column | has at least | 3 | innocents |
 | Each | column | has at least | 3 | criminals |
+| Each | column | has at least | 2 | criminals |
+| Each | row | has at least | 3 | innocents |

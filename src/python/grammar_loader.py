@@ -40,7 +40,7 @@ def build_grammar(person_names: list[str], professions: list[str]) -> str:
 
     names_lower = [n.lower() for n in person_names]
     names_s = " | ".join(f'"{n}\'s"' for n in names_lower)
-    names = " | ".join(f'"{n}"' for n in names_lower)
+    names = " | ".join(f'"{n}"' for n in names_lower) + ' | "me"'
     jobs = " | ".join(
         f'"{p}" | "{p}s"' for p in sorted({p.lower() for p in professions})
     )

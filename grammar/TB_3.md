@@ -11,3 +11,4 @@
 | gary  | has   | exactly 5 | innocent | neighbors |
 | kay   | has   | exactly 4 | innocent | neighbors |
 | david | has   | only one  | innocent | neighbor  |
+| diane | has | exactly 4 | innocent | neighbors |

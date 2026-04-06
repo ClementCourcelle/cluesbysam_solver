@@ -20,3 +20,8 @@
 | there's | an odd number of innocents neighboring tina |
 | there's | an odd number of innocents neighboring nicole |
 | there's | an odd number of criminals to the right of vince |
+| there's | an odd number of innocents in column b |
+| there's | an odd number of criminals in column a |
+| there's | an odd number of innocents neighboring john |
+| there's | an odd number of innocents on the edges |
+| there's | an odd number of innocents above uma |

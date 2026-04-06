@@ -12,7 +12,7 @@ list = \[ \]
 (min, max) => RANGE => \[ min ... max\]
 	(MIN(axis), MAX(axis))	=> RANGE =>	\[1, 2, 3, 4, 5\]
 
-(list, lambda) => MAP => \[ res, res, ..., res \] 
+(list, lambda) => MAP => \[ res, res, ..., res \]
 
 list(objet) => AND => combinaison_objet
 	\[o, o, ..., o\] => AND => o & o & ... & o
@@ -54,17 +54,23 @@ ANY(type, lambda) = OR(MAP(RANGE(MIN(type), MAX(type)), lambda))
 |          | NGH(name1) $\cap$ NGH(name2) : nb r                                    |
 | [[TA_4]] | nb=NB of name=NAME_S ngh pos=pos be r=role                             |
 |          | NGH(name) $\cap$ pos : nb r                                            |
+| [[TA_5]] | nb_with_opt_filter r=role j=job be pos=pos                             |
+|          | job_pos $\cap$ pos : nb1 r<br>&<br>job_pos : nb2 r                     |
 
-|          | NAME ...                                                   |
-| -------- | ---------------------------------------------------------- |
-| [[TB_1]] | name=NAME is one of nb=NB r=role pos=pos                   |
-|          | name : r<br>&<br>pos : nb r                                |
-| [[TB_2]] | name1=NAME is one of name2=NAME_S nb=NB r=role ngh         |
-|          | name1 : r<br>&<br>NGH(name2) : nb r                        |
-| [[TB_3]] | name=NAME has nb=NB r=role ngh                             |
-|          | NGH(name) : nb r                                           |
-| [[TB_4]] | name=NAME is the only person pos=pos with nb=NB r=role ngh |
-|          | NGH(name) : nb r<br>&<br>NGH(pos $-$ name) : NOT(nb r)     |
+|          | NAME ...                                                    |
+| -------- | ----------------------------------------------------------- |
+| [[TB_1]] | name=NAME is one of nb=NB r=role pos=pos                    |
+|          | name : r<br>&<br>pos : nb r                                 |
+| [[TB_2]] | name1=NAME is one of name2=NAME_S nb=NB r=role ngh          |
+|          | name1 : r<br>&<br>NGH(name2) : nb r                         |
+| [[TB_3]] | name=NAME has nb=NB r=role ngh                              |
+|          | NGH(name) : nb r                                            |
+| [[TB_4]] | name=NAME is the only person pos=pos with nb=NB r=role ngh  |
+|          | NGH(name) : nb r<br>&<br>NGH(pos $-$ POS(name)) : NOT(nb r) |
+| [[TB_5]] | name=NAME is r=role                                         |
+|          | POS(name) : 1 r                                             |
+| [[TB_6]] | name=NAME "has" nb_no r=role ngh pos=pos                    |
+|          | NGH(name) $\cap$ pos : nb r                                 |
 
 |          | THERE ...                                                                                                                                                    |
 | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -76,8 +82,12 @@ ANY(type, lambda) = OR(MAP(RANGE(MIN(type), MAX(type)), lambda))
 |          | OR(MAP(RANGE(1, CARD(axis)), nb -><br>    PICK(axis, c1) : nb r<br>	&<br>	OR(MAP(RANGE(0, nb - 1), nb2 -> <br>	    PICK(axis, c2): nb2 r<br>	))<br>))        |
 | [[TC_4]] | There are less r=role in axis=AXIS c1=COORD than AXIS c2=COORD                                                                                               |
 |          | OR(MAP(RANGE(1, CARD(axis)), nb -><br>    PICK(axis, c1) : nb r<br>	&<br>	OR(MAP(RANGE(nb+1, CARD(axis)), nb2 -> <br>	    PICK(axis, c2): nb2 r<br>	))<br>)) |
-| [[TC_5]] | There's an equal number of r=role in AXIS c1=COORD and c2=COORD                                                                                              |
-|          | OR(MAP(RANGE(0, CARD(Axis)), nb -><br>    PICK(axis, c1): nb r <br>	&<br>	PICK(axis, c2): nb r<br>))                                                         |
+| [[TC_5]] | There's an equal number of r=role in axis=AXIS c1=COORD and c2=COORD                                                                                         |
+|          | OR(MAP(RANGE(0, CARD(axis)), nb -><br>    PICK(axis, c1): nb r <br>	&<br>	PICK(axis, c2): nb r<br>))                                                         |
+| [[TC_6]] | there nb=NB r=role j=job                                                                                                                                     |
+|          |                                                                                                                                                              |
+| [[TC_7]] | there at least nb=NB r=role j=job                                                                                                                            |
+|          |                                                                                                                                                              |
 
 
 |          | MISC                                                                                                                                                                                        |
@@ -100,7 +110,9 @@ ANY(type, lambda) = OR(MAP(RANGE(MIN(type), MAX(type)), lambda))
 | [[TE_2]] | There are more r1=role j1=job than r2=role j2=job |
 | [[TE_3]] | There are as many role job as there are role job  |
 
-
+|          | NEGATIV                                 |
+| -------- | --------------------------------------- |
+| [[TF_1]] | "no one" pos=pos "has" a_det r=role ngh |
 
 |           | TMP                                                                                            |
 | --------- | ---------------------------------------------------------------------------------------------- |
@@ -112,9 +124,9 @@ ANY(type, lambda) = OR(MAP(RANGE(MIN(type), MAX(type)), lambda))
 | [[TMP6]]  | there parity_count                                                                             |
 | [[TMP7]]  | ALLBOTH role pos are connected                                                                 |
 | [[TMP9]]  | NAME and NAME have nb_no role ngh in common                                                    |
-| [[TMP10]] | nb_with_opt_filter job has a_det role directly dir them                                        |
+| [[TMP10]] | nb_with_opt_filter job has a_det role "directly" dir "them"                                    |
 | [[TMP14]] | ALLBOTH job be role                                                                            |
 | [[TMP15]] | NAME "has at least" NB role ngh                                                                |
 | [[TMP16]] | NB "of" NAME_S NB role ngh "also neighbor" NAME                                                |
+| [[TMP17]] | name1=NAME "and" name2=NAME "have an equal number of" r=role ngh                               |
 
-### NO MATCH
