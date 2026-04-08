@@ -11,3 +11,4 @@
 | wanda | is one of | 7 | innocents | on the edges |
 | freya | is one of | 3 | criminals | below barb |
 | anna | is one of | 3 | innocents | in column a |
+| uma | is one of | 3 | criminals | in column d |

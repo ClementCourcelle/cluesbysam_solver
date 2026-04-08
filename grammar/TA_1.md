@@ -26,3 +26,4 @@
 | exactly 2 | of the | 5 | criminals | on the edges | are | in column c |
 | only 1 | of the | 2 | criminals | neighboring hope | is | above zane |
 | only 1 | of the | 2 | criminals | neighboring mark | is | in column d |
+| only 1 | of the | 2 | innocents | neighboring freya | is | brian's neighbor |
