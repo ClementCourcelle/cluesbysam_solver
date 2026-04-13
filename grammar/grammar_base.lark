@@ -6,9 +6,6 @@ ALLBOTH: "all" | "both"
 // Common prefix for TMP4, TMP5, TMP6
 parity_count: "an" PARITY "number of" role pos
 
-// Optional "of the N" filter, used to merge TMP10+TMP11
-nb_with_opt_filter: NB ["of the" NB]
-
 pos: "in" AXIS COORD                        -> in_axis
    | "neighboring" NAME                     -> neighboring_name
    | "on the edges"                         -> on_the_edges
@@ -44,8 +41,8 @@ a_det: "a" | "an"
 // =================== Terminals ===================
 // NAME_S and NAME are injected at runtime — see load_parser() in main.py
 
-AXIS: "row" | "rows" | "column" | "columns"
-COORD: /[1-5]/ | /[a-d]/
+AXIS: /[Rr]ows?|[Cc]olumns?/
+COORD: /[1-5]|[a-dA-D]/
 NB: /(?:exactly\s+|only\s+)?(?:one|[1-9][0-9]*)/
 PARITY: "even" | "odd"
 SIDE: "left" | "right"

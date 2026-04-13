@@ -1,4 +1,5 @@
 
-| NB  | "of" | NAME_S  | "neighbors also neighbor" | NAME |
-| --- | ---- | ------- | ------------------------- | ---- |
-| 2   | of   | Alice's | neighbors also neighbor   | Bob  |
+| NB        | "of" | NAME_S | NB  | role     | ngh       | "also neighbor" | NAME  |
+| --------- | ---- | ------ | --- | -------- | --------- | --------------- | ----- |
+| Exactly 3 | of   | Gabe's | 5   | criminal | neighbors | also neighbor   | Carol |
+| exactly 2 | of | logan's | 6 | innocent | neighbors | also neighbor | nancy |
