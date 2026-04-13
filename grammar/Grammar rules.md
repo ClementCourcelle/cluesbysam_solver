@@ -38,6 +38,12 @@ RANGE(min, max) -> \[ min ... max\]
 NGH(case) -> set\<case\>
 CARD(set\<case\>) -> int
 POS(job) -> set\<case\>
+PARITY_RANGE(parity, max) -> list\<int\>
+	# "even" -> [0, 2, 4, ..., max]
+	# "odd"  -> [1, 3, 5, ..., max]
+DPOS(set\<case\>, dir) -> set\<case\>
+	# shift l'ensemble de case vers dir
+
 ### ax_list operations
 
 MIN(ax_list) -> int
@@ -99,17 +105,17 @@ NBE(ax_list) -> int
 |          | OR(MAP(RANGE(nb, CARD(POS(job))), n -><br>  POS(job): n r<br>))                                                                                                           |
 
 
-|          | MISC                                                                                                                                                                                                               |
-| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| [[TD_1]] | Each ax_list=AXIS has at least nb=NB r=role                                                                                                                                                                        |
-|          | AND(MAP(ax_list, a -> <br>    OR(MAP(RANGE(nb, NBE(ax_list)), b -> <br>	    a : b r <br>	))<br>))                                                                                                                       |
-| [[TD_2]] | Only one ax_list=AXIS has nb=NB r=role                                                                                                                                                                             |
-|          | OR(MAP(ax_list, a -> <br>    a : nb r <br>	&<br>	AND(MAP(ax_list $-$ a, p -><br>	   p !: nb r<br>	))<br>))                                                                                                                  |
-| [[TD_3]] | ax_list=AXIS c=COORD is the only AXIS with nb=NB r=role                                                                                                                                                            |
-|          | PICK(ax_list, c) : nb r<br>&<br>AND(MAP(ax_list $-$ PICK(ax_list, c), p -><br>  p !: nb r<br>))                                                                                                                         |
-| [[TD_4]] | ax_list=AXIS c=COORD has more role than any other AXIS                                                                                                                                                             |
-|          | OR(MAP(RANGE(1, NBE(ax_list)), a -> <br>    PICK(ax_list, c) : a r<br>	&<br>	AND(MAP(ax_list $-$ PICK(ax_list, c), pos -> <br>	    OR(MAP(RANGE(0, a - 1), b -><br>		    pos : b r<br>		))<br>	))<br>))            |
-| [[TD_5]] | ax_list=AXIS c=COORD has less role than any other AXIS                                                                                                                                                             |
+|          | MISC                                                                                                                                                                                                                   |
+| -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [[TD_1]] | Each ax_list=AXIS has at least nb=NB r=role                                                                                                                                                                            |
+|          | AND(MAP(ax_list, a -> <br>    OR(MAP(RANGE(nb, NBE(ax_list)), b -> <br>	    a : b r <br>	))<br>))                                                                                                                      |
+| [[TD_2]] | Only one ax_list=AXIS has nb=NB r=role                                                                                                                                                                                 |
+|          | OR(MAP(ax_list, a -> <br>    a : nb r <br>	&<br>	AND(MAP(ax_list $-$ a, p -><br>	   p !: nb r<br>	))<br>))                                                                                                             |
+| [[TD_3]] | ax_list=AXIS c=COORD is the only AXIS with nb=NB r=role                                                                                                                                                                |
+|          | PICK(ax_list, c) : nb r<br>&<br>AND(MAP(ax_list $-$ PICK(ax_list, c), p -><br>  p !: nb r<br>))                                                                                                                        |
+| [[TD_4]] | ax_list=AXIS c=COORD has more role than any other AXIS                                                                                                                                                                 |
+|          | OR(MAP(RANGE(1, NBE(ax_list)), a -> <br>    PICK(ax_list, c) : a r<br>	&<br>	AND(MAP(ax_list $-$ PICK(ax_list, c), pos -> <br>	    OR(MAP(RANGE(0, a - 1), b -><br>		    pos : b r<br>		))<br>	))<br>))                |
+| [[TD_5]] | ax_list=AXIS c=COORD has less role than any other AXIS                                                                                                                                                                 |
 |          | OR(MAP(RANGE(0, NBE(ax_list) - 1), a -> <br>    PICK(ax_list, c) : a r<br>	&<br>	AND(MAP(ax_list $-$ PICK(ax_list, c), pos -> <br>	    OR(MAP(RANGE(a + 1, NBE(ax_list)), b -><br>		    pos : b r<br>		))<br>	))<br>)) |
 
 
@@ -130,15 +136,27 @@ NBE(ax_list) -> int
 |           | TMP                                                                                                                                 |
 | --------- | ----------------------------------------------------------------------------------------------------------------------------------- |
 | [[TMP2]]  | name1=NAME has nb=NB less r=role neighbor than name2=NAME                                                                           |
+|           | OR(MAP(RANGE(0, min(CARD(NGH(name1)), CARD(NGH(name2))-nb)), a -> <br>    NGH(name1) : a r <br>	&<br>	NGH(name2) : (a + nb) r<br>)) |
 | [[TMP3]]  | name1=NAME has nb=NB more r=role neighbor than name2=NAME                                                                           |
 |           | OR(MAP(RANGE(0, min(CARD(NGH(name2)), CARD(NGH(name1))-nb)), a -> <br>    NGH(name1) : (a + nb) r <br>	&<br>	NGH(name2) : a r<br>)) |
-| [[TMP4]]  | parity_count neighbor NAME                                                                                                          |
-| [[TMP5]]  | parity_count are NAME_S ngh                                                                                                         |
-| [[TMP6]]  | there parity_count                                                                                                                  |
+| [[TMP4]]  | "an" PARITY "number of" role pos neighbor name=NAME                                                                                 |
+|           | OR(MAP(PARITY_RANGE(parity, CARD(pos $\cap$ NGH(name))), n -> <br>    pos $\cap$ NGH(name) : n r<br>))                              |
+| [[TMP5]]  | "an" PARITY "number of" role pos "are" name=NAME_S ngh                                                                              |
+|           | OR(MAP(PARITY_RANGE(parity, CARD(pos $\cap$ NGH(name))), n -> <br>    pos $\cap$ NGH(name) : n r<br>))                              |
+| [[TMP6]]  | there "an" PARITY "number of" role pos                                                                                              |
+|           | OR(MAP(PARITY_RANGE(parity, CARD(pos)), n -> <br>    pos : n r<br>))                                                                |
 | [[TMP7]]  | ALLBOTH role pos are connected                                                                                                      |
-| [[TMP9]]  | NAME and NAME have nb_no role ngh in common                                                                                         |
-| [[TMP10]] | nb1=NB "of the" nb2=NB job has a_det role "directly" dir "them"                                                                     |
-| [[TMP11]] | nb1=NB job has a_det role "directly" dir "them"                                                                                     |
-| [[TMP14]] | ALLBOTH job be role                                                                                                                 |
-| [[TMP15]] | NAME "has at least" NB role ngh                                                                                                     |
+| [[TMP9]]  | name1=NAME and name2=NAME have nb=nb_no r=role ngh in common                                                                        |
+|           | NGH(name1) $\cap$ NGH(name2) : nb r                                                                                                 |
+| [[TMP10]] | nb1=NB "of the" nb2=NB job=job has a_det r=role "directly" dir=dir "them"                                                           |
+|           | DPOS(POS(job), dir) : nb1 r                                                                                                         |
+| [[TMP11]] | nb1=NB job=job has a_det r=role "directly" dir=dir "them"                                                                           |
+|           | DPOS(POS(job), dir) : nb1 r                                                                                                         |
+| [[TMP14]] | ALLBOTH job=job be r=role                                                                                                           |
+|           | POS(job) : CARD(POS(job)) r                                                                                                         |
+| [[TMP15]] | name=NAME "has at least" nb=NB r=role ngh                                                                                           |
+|           | OR(MAP(RANGE(nb, CARD(NGH(name))), a -> <br>    NGH(name) : a r<br>))                                                               |
 | [[TMP17]] | name1=NAME "and" name2=NAME "have an equal number of" r=role ngh                                                                    |
+|           | OR(MAP(RANGE(0, min(CARD(NGH(name1)), CARD(NGH(name2)))), n -> <br>    NGH(name1) : n r<br>	&<br>	NGH(name2) : n r<br>))            |
+
+refactor DPOS de tel sorte que ça genere des predicat triviaux

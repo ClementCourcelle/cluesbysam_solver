@@ -1,10 +1,6 @@
 // =================== Sub-rules ===================
 
-// Merge TMP7+TMP8
 ALLBOTH: "all" | "both"
-
-// Common prefix for TMP4, TMP5, TMP6
-parity_count: "an" PARITY "number of" role pos
 
 pos: "in" AXIS COORD                        -> in_axis
    | "neighboring" NAME                     -> neighboring_name
