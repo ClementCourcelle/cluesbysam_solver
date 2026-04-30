@@ -13,14 +13,18 @@
 | there is  | only one  | innocent  | in row 3                    |
 | there is  | only one  | innocent  | in column b                 |
 | there are | exactly 2 | criminals | to the right of aaron       |
-| there are | exactly 3 | innocents | in row 5 |
-| there are | exactly 2 | innocents | in between anna and paul |
-| there are | exactly 2 | innocents | below mark |
-| there is | only one | innocent | above tina |
-| there is | only one | innocent | above maria |
-| there are | 7 | criminals | on the edges |
-| there are | exactly 2 | innocents | above uma |
-| there are | exactly 3 | criminals | in column a |
-| there is | only one | innocent | in row 1 |
-| there are | exactly 3 | innocents | above uma |
-| there are | exactly 3 | criminals | in column c |
+| there are | exactly 3 | innocents | in row 5                    |
+| there are | exactly 2 | innocents | in between anna and paul    |
+| there are | exactly 2 | innocents | below mark                  |
+| there is  | only one  | innocent  | above tina                  |
+| there is  | only one  | innocent  | above maria                 |
+| there are | 7         | criminals | on the edges                |
+| there are | exactly 2 | innocents | above uma                   |
+| there are | exactly 3 | criminals | in column a                 |
+| there is  | only one  | innocent  | in row 1                    |
+| there are | exactly 3 | innocents | above uma                   |
+| there are | exactly 3 | criminals | in column c                 |
+| there is  | only one  | innocent  | to the right of frank       |
+| there are | exactly 2 | innocents | in between isaac and xavi   |
+| there are | exactly 2 | innocents | in row 5                    |
+| there are | exactly 2 | innocents | in between betty and me |

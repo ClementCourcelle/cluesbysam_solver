@@ -25,3 +25,4 @@
 | there's | an   | odd    | number of   | innocents | neighboring john      |
 | there's | an   | odd    | number of   | innocents | on the edges          |
 | there's | an   | odd    | number of   | innocents | above uma             |
+| there's | an | odd | number of | criminals | neighboring logan |

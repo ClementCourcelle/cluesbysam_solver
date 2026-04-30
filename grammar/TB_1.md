@@ -12,3 +12,6 @@
 | freya | is one of | 3 | criminals | below barb |
 | anna | is one of | 3 | innocents | in column a |
 | uma | is one of | 3 | criminals | in column d |
+| nala | is one of | 4 | innocents | in column a |
+| xavi | is one of | 2 | criminals | in column c |
+| martin | is one of | 2 | criminals | in column a |

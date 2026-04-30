@@ -14,3 +14,6 @@
 | all     | innocents | in row 2    | are connected   |
 | all     | innocents | in row 5    | are connected   |
 | both    | criminals | in row 5    | are connected   |
+| all | innocents | in row 3 | are connected |
+| all | innocents | in column d | are connected |
+| both | innocents | in row 4 | are connected |

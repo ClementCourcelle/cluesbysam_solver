@@ -7,3 +7,4 @@
 | an   | odd    | number of   | innocents    | on the edges | neighbor   | joy    |
 | an   | odd    | number of   | us innocents | on the edges | neighbor   | igor   |
 | an   | odd    | number of   | innocents    | on the edges | neighbor   | tina   |
+| an | odd | number of | innocents | in column b | neighbor | flora |

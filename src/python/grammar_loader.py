@@ -1,4 +1,5 @@
 """Shared grammar utilities used by main.py and test_grammar.py."""
+
 from pathlib import Path
 
 from lark import Lark
@@ -19,11 +20,7 @@ def build_grammar(person_names: list[str], professions: list[str]) -> str:
     for md_file in sorted(GRAMMAR_DIR.glob("T*.md")):
         content = md_file.read_text()
         header = next(
-            (
-                l
-                for l in content.splitlines()
-                if l.strip().startswith("|") and "---" not in l
-            ),
+            (l for l in content.splitlines() if l.strip().startswith("|") and "---" not in l),
             None,
         )
         if not header:
@@ -40,10 +37,8 @@ def build_grammar(person_names: list[str], professions: list[str]) -> str:
 
     names_lower = [n.lower() for n in person_names]
     names_s = " | ".join(f'"{n}\'s"' for n in names_lower)
-    names = " | ".join(f'"{n}"' for n in names_lower) + ' | "me"'
-    jobs = " | ".join(
-        f'"{p}" | "{p}s"' for p in sorted({p.lower() for p in professions})
-    )
+    names = " | ".join(f'"{n}"' for n in names_lower) + ' | "me" | "i"'
+    jobs = " | ".join(f'"{p}" | "{p}s"' for p in sorted({p.lower() for p in professions}))
 
     return "\n".join(
         [

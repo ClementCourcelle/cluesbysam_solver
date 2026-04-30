@@ -10,3 +10,4 @@
 | There's an equal number of | criminals | in | columns | c | and | d |
 | There's an equal number of | criminals | in | rows | 2 | and | 5 |
 | There's an equal number of | innocents | in | rows | 1 | and | 4 |
+| There's an equal number of | innocents | in | rows | 4 | and | 5 |

@@ -9,3 +9,4 @@
 | column | a | is the only | column | with | exactly 2 | criminals |
 | row | 3 | is the only | row | with | exactly 3 | innocents |
 | column | d | is the only | column | with | exactly one | criminal |
+| row | 2 | is the only | row | with | exactly 3 | innocents |

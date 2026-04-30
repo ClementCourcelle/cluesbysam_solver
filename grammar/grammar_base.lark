@@ -15,6 +15,7 @@ ngh: "neighbor" | "neighbors"
 ngh_a: NAME_S ngh | "my" ngh
 
 role: ["us"] ("innocent" | "innocents" | "criminal" | "criminals")
+person: "person" | "persons"
 
 be: "is" | "are"
 

@@ -17,3 +17,4 @@
 | exactly 1 | innocent | in column c | is | neighboring max |
 | exactly 1 | innocent | above tom | is | neighboring mark |
 | exactly 1 | innocent | in row 2 | is | neighboring nick |
+| exactly 1 | innocent | to the left of pam | is | neighboring flora |

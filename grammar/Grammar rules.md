@@ -72,6 +72,7 @@ NBE(ax_list) -> int
 | [[TA_6]] | nb1=NB r=role job=job be pos=pos                                     |
 |          | POS(job) $\cap$ pos : nb1 r                                          |
 
+
 |          | NAME ...                                                                      |
 | -------- | ----------------------------------------------------------------------------- |
 | [[TB_1]] | name=NAME is one of nb=NB r=role pos=pos                                      |
@@ -158,5 +159,15 @@ NBE(ax_list) -> int
 |           | OR(MAP(RANGE(nb, CARD(NGH(name))), a -> <br>    NGH(name) : a r<br>))                                                               |
 | [[TMP17]] | name1=NAME "and" name2=NAME "have an equal number of" r=role ngh                                                                    |
 |           | OR(MAP(RANGE(0, min(CARD(NGH(name1)), CARD(NGH(name2)))), n -> <br>    NGH(name1) : n r<br>	&<br>	NGH(name2) : n r<br>))            |
+| [[TMP18]] | nb=NB person pos=pos has a_det r=role "directly" dir=dir "them"                                                                     |
+|           |                                                                                                                                     |
+| [[TMP19]] | nb=NB r=role pos=pos has a_det r=role "directly" dir=dir "them"                                                                     |
+|           |                                                                                                                                     |
+| [[TMP20]] | name=NAME is the only on with nb=NB r=role ngh                                                                                      |
+|           |                                                                                                                                     |
+| [[TMP21]] | No one pos has more than NB role ngh                                                                                                |
+|           |                                                                                                                                     |
+| [[TMP22]] | No one pos has less than NB role ngh                                                                                                |
+|           |                                                                                                                                     |
 
 refactor DPOS de tel sorte que ça genere des predicat triviaux
