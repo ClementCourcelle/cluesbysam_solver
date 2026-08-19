@@ -1,0 +1,47 @@
+start: clue
+
+clue: NB "of the" NB _role pos _BE _super_pos -> ta_1
+  | NB _role pos _BE _super_pos -> ta_2
+  | NB "of" _name_s NB _role _NGH "also neighbor" NAME -> ta_3
+  | NB "of" _name_s _NGH pos _BE _role -> ta_4
+  | NB "of the" NB _role _job _BE pos -> ta_5
+  | NB _role _job _BE pos -> ta_6
+  | NAME "is one of" NB _role pos -> tb_1
+  | NAME "is one of" _name_s NB _role _NGH -> tb_2
+  | NAME "has" NB _role _NGH -> tb_3
+  | NAME "is the only _PERSON" pos "with" NB _role _NGH -> tb_4
+  | NAME "is" _role -> tb_5
+  | NAME "has" nb_no _role _NGH pos -> tb_6
+  | _THERE NB _role pos -> tc_1
+  | _THERE "at least" NB _role pos -> tc_2
+  | "There are" "more" _role "in" AXIS COORD "than" AXIS COORD -> tc_3
+  | "There are" "less" _role "in" AXIS COORD "than" AXIS COORD -> tc_4
+  | "There's an equal number of" _role "in" AXIS COORD "and" COORD -> tc_5
+  | _THERE NB _role _job -> tc_6
+  | _THERE "at least" NB _role _job -> tc_7
+  | "Each" AXIS "has at least" NB _role -> td_1
+  | "Only one" AXIS "has" NB _role -> td_2
+  | AXIS COORD "is the only" AXIS "with" NB _role -> td_3
+  | AXIS COORD "has" "more" _role "than any other" AXIS -> td_4
+  | AXIS COORD "has" "less" _role "than any other" AXIS -> td_5
+  | "There are" "more" _role _job "than" _role _job -> te_1
+  | "There are" "less" _role _job "than" _role _job -> te_2
+  | "There are as many" _role _job "as _THERE are" _role _job -> te_3
+  | "no one" pos "has" _A_DET _role _NGH -> tf_1
+  | NB "of the" NB _job _HAVE _A_DET _role "directly" dir "them" -> tmp10
+  | NB _job _HAVE _A_DET _role "directly" dir "them" -> tmp11
+  | ALLBOTH _job _BE _role -> tmp14
+  | NAME "has at least" NB _role _NGH -> tmp15
+  | NAME "and" NAME "have an equal number of" _role _NGH -> tmp17
+  | NB _PERSON pos _HAVE _A_DET _role "directly" dir "them" -> tmp18
+  | NB _role pos _HAVE _A_DET _role "directly" dir "them" -> tmp19
+  | NAME "has" NB "less" _role "neighbor than" NAME -> tmp2
+  | NAME "is the only one" "with" NB _role _NGH -> tmp20
+  | "No one" pos _HAVE "more than" NB _role _NGH -> tmp21
+  | "No one" pos _HAVE "less than" NB _role _NGH -> tmp22
+  | NAME "has" NB "more" _role "neighbor than" NAME -> tmp3
+  | "an" PARITY "number of" _role pos "neighbor" NAME -> tmp4
+  | "an" PARITY "number of" _role pos "are" _name_s _NGH -> tmp5
+  | _THERE "an" PARITY "number of" _role pos -> tmp6
+  | ALLBOTH _role pos "are connected" -> tmp7
+  | NAME "and" NAME "have" nb_no _role _NGH "in common" -> tmp9

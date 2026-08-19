@@ -1,27 +1,17 @@
 // =================== Sub-rules ===================
 
-ALLBOTH: "all" | "both"
+_super_pos: ngh_a | pos
 
-pos: "in" AXIS COORD                        -> in_axis
-   | "neighboring" NAME                     -> neighboring_name
-   | "on the edges"                         -> on_the_edges
-   | "in" ("a" | "the") ("corner" | "corners") -> in_a_corner
-   | "in between" NAME "and" NAME           -> in_between_names
-   | dir NAME                               -> dir_of_name
+pos: "in" AXIS COORD                  -> in_axis
+   | "neighboring" NAME               -> neighboring_name
+   | "on the edges"                   -> on_the_edges
+   | "in" ("a" | "the") "corner" "s"? -> in_a_corner
+   | "in between" NAME "and" NAME     -> in_between_names
+   | dir NAME                         -> dir_of_name
 
-super_pos: ngh_a | pos
+ngh_a: _name_s _NGH
 
-ngh: "neighbor" | "neighbors"
-ngh_a: NAME_S ngh | "my" ngh
-
-role: ["us"] ("innocent" | "innocents" | "criminal" | "criminals")
-person: "person" | "persons"
-
-be: "is" | "are"
-
-there: "there is" | "there are" | "there's"
-
-has: "has" | "have"
+_role: "us"? ROLE "s"?
 
 nb_no: NB  -> nb
       | "no" -> no
@@ -31,17 +21,26 @@ dir: "above"                    -> above
    | "to the" SIDE "of"         -> to_side_of
 
 // JOB is injected at runtime — see load_parser() in main.py
-job: JOB
-
-a_det: "a" | "an"
+_job: "us"? JOB "s"?
+_name_s: NAME "'s" | MY
 
 // =================== Terminals ===================
-// NAME_S and NAME are injected at runtime — see load_parser() in main.py
+// NAME are injected at runtime — see load_parser() in main.py
 
+_A_DET: "a" | "an"
+_BE: "is" | "are"
+_HAVE: "has" | "have"
+_NGH: "neighbor" "s"?
+_THERE: "there is" | "there are" | "there's"
+_PERSON: "person" "s"? 
+
+ALLBOTH: "all" | "both"
 AXIS: /[Rr]ows?|[Cc]olumns?/
 COORD: /[1-5]|[a-dA-D]/
+MY: "my"
 NB: /(?:exactly\s+|only\s+)?(?:one|[1-9][0-9]*)/
 PARITY: "even" | "odd"
+ROLE: "innocent" | "criminal"
 SIDE: "left" | "right"
 
 %ignore /\s+/
