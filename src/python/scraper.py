@@ -1,5 +1,5 @@
 from typing import List, Optional
-from playwright.async_api import async_playwright, Page, Browser
+from playwright.async_api import async_playwright, Page, Browser, Locator
 from game_state import Person, Status
 
 
@@ -42,7 +42,7 @@ class GameScraper:
 
     async def get_grid_state(self) -> List[Person]:
         """Scrape the current state of all 20 people."""
-        people = []
+        people = {}
 
         # Iterate through all card containers in the grid
         cards = self.page.locator(".card-container .card")
@@ -62,12 +62,12 @@ class GameScraper:
             # Extract Name
             name_el = card.locator("h3.name")
             name = await name_el.text_content()
-            name = name.strip().title()
+            name = name.strip().title().lower()
 
             # Extract Profession
             prof_el = card.locator(".profession")
             profession_str = await prof_el.text_content()
-            profession = self._extract_profession(profession_str)
+            profession = self._extract_profession(profession_str).lower()
 
             # Extract Status & Clue
             # Check classes on the card div
@@ -87,35 +87,35 @@ class GameScraper:
                     clue_text = await clue_el.text_content()
 
             # Parse Row/Col from Coord
-            col = coord[0]
-            row = int(coord[1])
+            # col = coord[0]
+            # row = int(coord[1])
 
             person = Person(
                 id=coord,
                 name=name,
                 profession=profession,
-                row=row,
-                col=col,
+                # row=row,
+                # col=col,
                 status=status,
                 clue=clue_text,
             )
-            people.append(person)
+            people[name] = person
 
         # Calculate neighbors for each person
-        for p in people:
-            p.neighbors = []
-            for other in people:
-                if p.name == other.name:
-                    continue
-
-                row_diff = abs(p.row - other.row)
-                col_p = ord(p.col) - ord("A")
-                col_o = ord(other.col) - ord("A")
-                col_diff = abs(col_p - col_o)
-
-                if row_diff <= 1 and col_diff <= 1:
-                    p.neighbors.append(other.name)
-
+        # for p in people:
+        #     p.neighbors = []
+        #     for other in people:
+        #         if p.name == other.name:
+        #             continue
+        #
+        #         row_diff = abs(p.row - other.row)
+        #         col_p = ord(p.col) - ord("A")
+        #         col_o = ord(other.col) - ord("A")
+        #         col_diff = abs(col_p - col_o)
+        #
+        #         if row_diff <= 1 and col_diff <= 1:
+        #             p.neighbors.append(other.name)
+        #
         return people
 
     async def get_visible_clues(self) -> List[str]:
@@ -132,22 +132,10 @@ class GameScraper:
 
         return clues
 
-    async def mark_person(self, name: str, status: Status):
-        """Click a person and set their status."""
-        if status == Status.UNKNOWN:
-            return
-
-        # 1. Click the card to open modal
-        name_lower = name.lower()
-
-        # Locator for the card containing the name
-        card_loc = self.page.locator(
-            f".card:has(h3.name:text-is('{name_lower}'))"
-        ).first
-
-        if await card_loc.count() == 0:
-            # Fallback: try case-insensitive text match
-            card_loc = self.page.locator(f".card:has(h3.name:text('{name}'))").first
+    async def mark_card(self, card_loc: Locator, status: Status):
+        # if await card_loc.count() == 0:
+        #     # Fallback: try case-insensitive text match
+        #     card_loc = self.page.locator(f".card:has(h3.name:text('{name}'))").first
 
         await card_loc.scroll_into_view_if_needed()
         await card_loc.click()
@@ -171,6 +159,28 @@ class GameScraper:
             close_btn = modal.locator("button.btn-close")
             if await close_btn.is_visible():
                 await close_btn.click()
+
+    async def mark_id(self, id: str, status: Status):
+        """Click a card by id and set their status."""
+        if status == Status.UNKNOWN:
+            return
+
+        # 1. Click the card to open modal
+        # Locator for the card containing the name
+        card_loc = self.page.locator(f".card:has(p.coord:text-is('{id}'))").first
+        await self.mark_card(card_loc, status)
+
+    async def mark_person(self, name: str, status: Status):
+        """Click a person and set their status."""
+        if status == Status.UNKNOWN:
+            return
+
+        # 1. Click the card to open modal
+        name_lower = name.lower()
+
+        # Locator for the card containing the name
+        card_loc = self.page.locator(f".card:has(h3.name:text-is('{name_lower}'))").first
+        await self.mark_person(card_loc)
 
     async def check_for_mistake(self) -> bool:
         """Check if the 'Not enough evidence' modal is visible."""
@@ -201,9 +211,7 @@ class GameScraper:
     async def is_game_complete(self) -> bool:
         """Check if all 20 cards have been solved (no longer unknown)."""
         try:
-            solved_count = await self.page.locator(
-                ".card.innocent, .card.criminal"
-            ).count()
+            solved_count = await self.page.locator(".card.innocent, .card.criminal").count()
             return solved_count == 20
         except Exception:
             return False

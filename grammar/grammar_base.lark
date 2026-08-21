@@ -9,12 +9,14 @@ pos: "in" AXIS COORD                  -> in_axis
    | "in between" NAME "and" NAME     -> in_between_names
    | dir NAME                         -> dir_of_name
 
-ngh_a: _name_s _NGH
+ngh_a: _name_s _NGH -> neighboring_name
 
 _role: "us"? ROLE "s"?
 
-nb_no: NB  -> nb
-      | "no" -> no
+_nb_no: _nb
+      | NO
+
+_nb: "exactly"? "only"? NB
 
 dir: "above"                    -> above
    | "below"                    -> below
@@ -39,6 +41,7 @@ AXIS: /[Rr]ows?|[Cc]olumns?/
 COORD: /[1-5]|[a-dA-D]/
 MY: "my"
 NB: /(?:exactly\s+|only\s+)?(?:one|[1-9][0-9]*)/
+NO: "no"
 PARITY: "even" | "odd"
 ROLE: "innocent" | "criminal"
 SIDE: "left" | "right"
