@@ -26,7 +26,7 @@ clue: _nb "of the" _nb _role pos _BE _super_pos -> ta_1
   | AXIS COORD "has" "less" _role "than any other" AXIS -> td_5
   | "there are" "more" _role _job "than" _role _job -> te_1
   | "there are" "less" _role _job "than" _role _job -> te_2
-  | "there are as many" _role _job "as _THERE are" _role _job -> te_3
+  | "there are as many" _role _job "as there are" _role _job -> te_3
   | "no one" pos "has" _A_DET _role _NGH -> tf_1
   | _nb "of the" _nb _job _HAVE _A_DET _role _directly_dir_them -> tmp_10
   | _nb _job _HAVE _A_DET _role _directly_dir_them -> tmp_11
@@ -39,6 +39,7 @@ clue: _nb "of the" _nb _role pos _BE _super_pos -> ta_1
   | NAME "is the only one" "with" _nb _role _NGH -> tmp_20
   | "no one" pos _HAVE "more than" _nb _role _NGH -> tmp_21
   | "no one" pos _HAVE "less than" _nb _role _NGH -> tmp_22
+  | _nb _PERSON pos _HAVE _nb _role _NGH -> tmp_23
   | NAME "has" _nb "more" _role "neighbor than" NAME -> tmp_3
   | "an" PARITY "number of" _role pos "neighbor" NAME -> tmp_4
   | "an" PARITY "number of" _role pos "are" _name_s _NGH -> tmp_5

@@ -19,9 +19,8 @@ class Cell:
         return f"{chr(ord('A') + coords[0] - 1)}{coords[1]}"
 
     @staticmethod
-    def neighbors(id: str) -> list[tuple]:
-        """Get coordinates of cells neighboring person's id"""
-        coords = Cell.id_to_coords(id)
+    def neighbors(coords: str) -> list[tuple]:
+        """Get coordinates of cells neighboring a cell"""
         return [
             (i, j)
             for i in range(coords[0] - 1, coords[0] + 2)
@@ -37,7 +36,7 @@ class Cell:
     @staticmethod
     def below(coords: tuple) -> list[tuple]:
         """Get cells below input cell"""
-        return [(coords[0], i) for i in range(coords[1], NB_ROWS + 1)]
+        return [(coords[0], i) for i in range(coords[1] + 1, NB_ROWS + 1)]
 
     @staticmethod
     def left(coords: tuple) -> list[tuple]:
@@ -47,12 +46,12 @@ class Cell:
     @staticmethod
     def right(coords: tuple) -> list[tuple]:
         """Get cells right of input cell"""
-        return [(i, coords[1]) for i in range(coords[0], NB_COLS + 1)]
+        return [(i, coords[1]) for i in range(coords[0] + 1, NB_COLS + 1)]
 
     @staticmethod
     def corners() -> list[tuple]:
         """Get cells in the corners of the grid"""
-        return [(1, 1), (1, NB_COLS), (NB_ROWS, 1), (NB_ROWS, NB_COLS)]
+        return [(1, 1), (1, NB_ROWS), (NB_COLS, 1), (NB_COLS, NB_ROWS)]
 
     @staticmethod
     def edges() -> list[tuple]:
@@ -68,8 +67,12 @@ class Cell:
     def zone_directly_dir(cells: list[tuple], dir: str) -> list[tuple]:
         """Get cells directly on the direction of input cells"""
         zone = []
+        print("ZONE !!!")
+        print(f"{cells = }")
         for c in cells:
             dir_of_cell = Cell.dir[dir](c)
+            print(f"{c = }")
+            print(f"{dir_of_cell = }")
             if not dir_of_cell:
                 continue
 

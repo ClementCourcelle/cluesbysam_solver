@@ -166,6 +166,11 @@ async def main() -> None:
             print(f"clicked {id} crim")
         new_crim.clear()
 
+        if len(known_crim) + len(known_inn) == len(z3_grid):
+            print("Done !")
+            break
+    time.sleep(30)
+
 
 # async def load_new_indices() -> None:
 #     GS = GameScraper(headless=False)

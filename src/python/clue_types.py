@@ -1,6 +1,8 @@
 from lark import Tree, Token
-from game_state import Cell, Row, Column, Status
 import z3
+from itertools import combinations
+
+from game_state import Cell, Row, Column, Status
 
 
 class Clue:
@@ -65,7 +67,7 @@ class Clue:
 
     def neighbors(self, name: str) -> list[tuple]:
         """Get cells neighboring of person"""
-        return Cell.neighbors(self.people[name].id)
+        return Cell.neighbors(Cell.id_to_coords(self.people[name].id))
 
     def name_to_cell(self, name: str) -> tuple:
         """Get cell coordinate of person"""
@@ -126,6 +128,48 @@ class Clue:
             else z3.Sum([z3.If(c, 1, 0) for c in cells]) < len(cells) - n
         )
 
+    def predicat_more_zone(self, cell_indices: list[tuple], cell_indices2: list[tuple], role: Status):
+        """Return rule to assign more roles in cells than cells2"""
+        print(f"MORE")
+        print(f"{cell_indices = }")
+        print(f"{cell_indices2 = }")
+        print(f"{role = }")
+        cells = [self.grid[c[0], c[1]] for c in cell_indices]
+        cells2 = [self.grid[c[0], c[1]] for c in cell_indices2]
+        sum = (
+            z3.Sum([z3.If(c, 1, 0) for c in cells])
+            if role == Status.INNOCENT
+            else z3.Sum([z3.If(c, 0, 1) for c in cells])
+        )
+        sum2 = (
+            z3.Sum([z3.If(c, 1, 0) for c in cells2])
+            if role == Status.INNOCENT
+            else z3.Sum([z3.If(c, 0, 1) for c in cells2])
+        )
+        return sum > sum2
+
+    def predicat_as_many(
+        self, cell_indices: list[tuple], cell_indices2: list[tuple], role: Status, role2: Status
+    ):
+        """Return rule to assign as many roles in two zones"""
+        print(f"AS MANY")
+        print(f"{cell_indices = }")
+        print(f"{cell_indices2 = }")
+        print(f"{role = }")
+        cells = [self.grid[c[0], c[1]] for c in cell_indices]
+        cells2 = [self.grid[c[0], c[1]] for c in cell_indices2]
+        sum = (
+            z3.Sum([z3.If(c, 1, 0) for c in cells])
+            if role == Status.INNOCENT
+            else z3.Sum([z3.If(c, 0, 1) for c in cells])
+        )
+        sum2 = (
+            z3.Sum([z3.If(c, 1, 0) for c in cells2])
+            if role == Status.INNOCENT
+            else z3.Sum([z3.If(c, 0, 1) for c in cells2])
+        )
+        return sum == sum2
+
     def split_roles_in_zone(self, zone, zone_role, role):
         """Return rule that assigns all the roles cells to to one part of a zone"""  # pire commentaire
         print("!! AND !!")
@@ -160,7 +204,7 @@ class Clue:
                 return Cell.corners()
             case 'neighboring_name':
                 name = pos.children[0].value
-                return Cell.neighbors(self.people[name].id)
+                return self.neighbors(name)
             case 'in_between_names':
                 id1 = self.people[pos.children[0].value].id
                 id2 = self.people[pos.children[1].value].id
@@ -257,6 +301,15 @@ class TC_2(Clue):
         cells = self.pos_to_cells(self.pos)
         return self.predicat_more_eq(cells, self.nb, self.role)
 
+class TC_3(Clue):
+    def __init__(self, tree, name, people, grid):
+        super().__init__(tree, name, people, grid)
+
+    def get_rule(self):
+        cells = self.axis.cells(self.coord)
+        cells2 = self.axis.cells(self.coord2)
+        return self.predicat_more_zone(cells, cells2, self.role)
+
 
 class TD_1(Clue):
     def __init__(self, tree, name, people, grid):
@@ -286,6 +339,18 @@ class TD_3(Clue):
                 if ax_coord != self.coord
             ]
         )
+
+
+class TE_3(Clue):
+    def __init__(self, tree, name, people, grid):
+        super().__init__(tree, name, people, grid)
+
+    def get_rule(self):
+        print(f"{self.job = }")
+        print(f"{self.job2 = }")
+        cells = self.job_to_cells(self.job)
+        cells2 = self.job_to_cells(self.job2)
+        return self.predicat_as_many(cells, cells2, self.role, self.role2)
 
 
 class TMP_6(Clue):
@@ -330,3 +395,31 @@ class TMP_18(Clue):
     def get_rule(self):
         cells = self.pos_to_cells(self.pos)
         return self.predicat(Cell.zone_directly_dir(cells, self.dir), self.nb, self.role)
+
+
+class TMP_23(Clue):
+    def __init__(self, tree, name, people, grid):
+        super().__init__(tree, name, people, grid)
+
+    def get_rule(self):
+        cells = self.pos_to_cells(self.pos)
+        neighbors = [Cell.neighbors(c) for c in cells]
+        combs = list(combinations(neighbors, self.nb))
+        print(f"{cells = }")
+        print(f"{neighbors = }")
+        print(f"{combs = }")
+        print(f"{self.nb = }")
+        print(f"{self.nb2 = }")
+        return z3.Or(
+            [
+                z3.And(
+                    [self.predicat(n, self.nb2, self.role) for n in neighbors if n in comb]
+                    + [
+                        self.predicat_neq(n, self.nb2, self.role)
+                        for n in neighbors
+                        if n not in comb
+                    ]
+                )
+                for comb in combs
+            ]
+        )
