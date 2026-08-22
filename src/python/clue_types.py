@@ -63,13 +63,17 @@ class Clue:
         """Get the cells in a direction of a person"""
         return Cell.dir[direction](Cell.id_to_coords(self.people[name].id))
 
-    def neighbors(self, name) -> list[tuple]:
+    def neighbors(self, name: str) -> list[tuple]:
         """Get cells neighboring of person"""
         return Cell.neighbors(self.people[name].id)
 
-    def name_to_cell(self, name) -> tuple:
+    def name_to_cell(self, name: str) -> tuple:
         """Get cell coordinate of person"""
         return Cell.id_to_coords(self.people[name].id)
+
+    def job_to_cells(self, job: str) -> list[tuple]:
+        """Get cells of person with job"""
+        return [Cell.id_to_coords(p.id) for p in self.people.values() if p.profession == job]
 
     def predicat(self, cell_indices: list[tuple], n: int, role=Status.INNOCENT):
         """Return rule to assign number of roles to a zone"""
@@ -308,6 +312,15 @@ class TMP_7(Clue):
         return z3.Or(
             [self.split_roles_in_zone(pos_cells, group, self.role) for group in cells_groups]
         )
+
+
+class TMP_11(Clue):
+    def __init__(self, tree, name, people, grid):
+        super().__init__(tree, name, people, grid)
+
+    def get_rule(self):
+        cells = self.job_to_cells(self.job)
+        return self.predicat(Cell.zone_directly_dir(cells, self.dir), self.nb, self.role)
 
 
 class TMP_18(Clue):

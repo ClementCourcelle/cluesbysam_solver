@@ -69,7 +69,7 @@ class Cell:
         """Get cells directly on the direction of input cells"""
         zone = []
         for c in cells:
-            dir_of_cell = Cell.dir_coords[dir](c)
+            dir_of_cell = Cell.dir[dir](c)
             if not dir_of_cell:
                 continue
 
