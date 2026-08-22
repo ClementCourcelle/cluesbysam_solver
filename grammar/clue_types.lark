@@ -28,13 +28,13 @@ clue: _nb "of the" _nb _role pos _BE _super_pos -> ta_1
   | "there are" "less" _role _job "than" _role _job -> te_2
   | "there are as many" _role _job "as _THERE are" _role _job -> te_3
   | "no one" pos "has" _A_DET _role _NGH -> tf_1
-  | _nb "of the" _nb _job _HAVE _A_DET _role "directly" dir "them" -> tmp_10
-  | _nb _job _HAVE _A_DET _role "directly" dir "them" -> tmp_11
+  | _nb "of the" _nb _job _HAVE _A_DET _role _directly_dir_them -> tmp_10
+  | _nb _job _HAVE _A_DET _role _directly_dir_them -> tmp_11
   | ALLBOTH _job _BE _role -> tmp_14
   | NAME "has at least" _nb _role _NGH -> tmp_15
   | NAME "and" NAME "have an equal number of" _role _NGH -> tmp_17
-  | _nb _PERSON pos _HAVE _A_DET _role "directly" dir "them" -> tmp_18
-  | _nb _role pos _HAVE _A_DET _role "directly" dir "them" -> tmp_19
+  | _nb _PERSON pos _HAVE _A_DET _role _directly_dir_them -> tmp_18
+  | _nb _role pos _HAVE _A_DET _role _directly_dir_them -> tmp_19
   | NAME "has" _nb "less" _role "neighbor than" NAME -> tmp_2
   | NAME "is the only one" "with" _nb _role _NGH -> tmp_20
   | "no one" pos _HAVE "more than" _nb _role _NGH -> tmp_21

@@ -7,24 +7,24 @@ pos: "in" AXIS COORD                  -> in_axis
    | "on the edges"                   -> on_the_edges
    | "in" ("a" | "the") "corner" "s"? -> in_a_corner
    | "in between" NAME "and" NAME     -> in_between_names
-   | dir NAME                         -> dir_of_name
+   | _dir NAME                        -> dir_of_name
 
 ngh_a: _name_s _NGH -> neighboring_name
 
-_role: "us"? ROLE "s"?
+_name_s: NAME "'s" | MY
 
-_nb_no: _nb
-      | NO
+_nb_no: _nb | NO
 
 _nb: "exactly"? "only"? NB
 
-dir: "above"                    -> above
-   | "below"                    -> below
-   | "to the" SIDE "of"         -> to_side_of
+_directly_dir_them: "directly" _dir "them"
+
+_dir: DIR | "to the" DIR "of"
+
+_role: "us"? ROLE "s"?
 
 // JOB is injected at runtime — see load_parser() in main.py
 _job: "us"? JOB "s"?
-_name_s: NAME "'s" | MY
 
 // =================== Terminals ===================
 // NAME are injected at runtime — see load_parser() in main.py
@@ -39,11 +39,11 @@ _PERSON: "person" "s"?
 ALLBOTH: "all" | "both"
 AXIS: /[Rr]ows?|[Cc]olumns?/
 COORD: /[1-5]|[a-dA-D]/
+DIR: "left" | "right" | "above" | "below"
 MY: "my"
 NB: /(?:exactly\s+|only\s+)?(?:one|[1-9][0-9]*)/
 NO: "no"
 PARITY: "even" | "odd"
 ROLE: "innocent" | "criminal"
-SIDE: "left" | "right"
 
 %ignore /\s+/

@@ -99,7 +99,6 @@ async def main() -> None:
             c = Cell.id_to_coords(p.id)
             known_inn.add(c) if p.status == Status.INNOCENT else known_crim.add(c)
             break
-
     # add first visible persone to the solver
     solver.add(z3_grid[c[0], c[1]] == True)
 
