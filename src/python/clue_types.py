@@ -128,7 +128,9 @@ class Clue:
             else z3.Sum([z3.If(c, 1, 0) for c in cells]) < len(cells) - n
         )
 
-    def predicat_more_zone(self, cell_indices: list[tuple], cell_indices2: list[tuple], role: Status):
+    def predicat_more_zone(
+        self, cell_indices: list[tuple], cell_indices2: list[tuple], role: Status
+    ):
         """Return rule to assign more roles in cells than cells2"""
         print(f"MORE")
         print(f"{cell_indices = }")
@@ -191,10 +193,21 @@ class Clue:
     def pos_to_cells(self, pos: Tree) -> list[Cell]:
         """Get cells from position tree"""
         type = pos.data
+        print(pos)
         match (type):
             case 'in_axis':
-                axis_type = Row if pos.children[0].value == "row" else Column
-                value = pos.children[1].value
+                axis_tree = pos.children[0]
+                if axis_tree.children[0].type == "axis":
+                    axis_type = Row if axis_tree.children[0].value == "row" else Column
+                    value = axis_tree.children[1].value
+                else:
+                    id = self.people[axis_tree.children[0]].id
+                    if axis_tree.children[1].value == "row":
+                        axis_type = Row
+                        value = id[1]
+                    else:
+                        axis_type = Column
+                        value = id[0]
                 axis_coord = ord(value) - ord('a') + 1 if value.isalpha() else int(value)
                 print(f"{axis_coord = }")
                 return axis_type.cells(axis_coord)
@@ -246,6 +259,7 @@ class TA_2(Clue):
         cells = self.pos_to_cells(self.pos)
         cells2 = self.pos_to_cells(self.pos2)
         inter = Cell.intersection(cells, cells2)
+
         return self.predicat(inter, self.nb, self.role)
 
 
@@ -300,6 +314,7 @@ class TC_2(Clue):
     def get_rule(self):
         cells = self.pos_to_cells(self.pos)
         return self.predicat_more_eq(cells, self.nb, self.role)
+
 
 class TC_3(Clue):
     def __init__(self, tree, name, people, grid):

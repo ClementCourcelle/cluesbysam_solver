@@ -2,12 +2,14 @@
 
 _super_pos: ngh_a | pos
 
-pos: "in" AXIS COORD                  -> in_axis
+pos: "in" axis                        -> in_axis
    | "neighboring" NAME               -> neighboring_name
    | "on the edges"                   -> on_the_edges
    | "in" ("a" | "the") "corner" "s"? -> in_a_corner
    | "in between" NAME "and" NAME     -> in_between_names
    | _dir NAME                        -> dir_of_name
+
+axis: MY AXIS | AXIS COORD
 
 ngh_a: _name_s _NGH -> neighboring_name
 
