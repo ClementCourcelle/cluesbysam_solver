@@ -190,14 +190,14 @@ class Clue:
         start = 0 if parity == 'even' else 1
         return self.or_range_predicat(cell_indices, range(start, len(cell_indices), 2), role)
 
-    def pos_to_cells(self, pos: Tree) -> list[Cell]:
+    def pos_to_cells(self, pos: Tree) -> list[tuple]:
         """Get cells from position tree"""
         type = pos.data
         print(pos)
         match (type):
             case 'in_axis':
                 axis_tree = pos.children[0]
-                if axis_tree.children[0].type == "axis":
+                if axis_tree.children[0].type == "AXIS":
                     axis_type = Row if axis_tree.children[0].value == "row" else Column
                     value = axis_tree.children[1].value
                 else:
@@ -223,13 +223,13 @@ class Clue:
                 id2 = self.people[pos.children[1].value].id
                 vertical = Cell.id_to_coords(id1)[0] == Cell.id_to_coords(id2)[0]
 
-                first = id1 if id1 < id2 else id2
-                sec = id1 if first == id1 else id2
+                first = Cell.id_to_coords(id1 if id1 < id2 else id2)
+                sec = Cell.id_to_coords(id1 if first == id1 else id2)
 
                 return (
-                    Cell.below(first) and Cell.above(sec)
+                    Cell.intersection(Cell.below(first), Cell.above(sec))
                     if vertical
-                    else Cell.right(first) and Cell.left(sec)
+                    else Cell.intersection(Cell.right(first), Cell.left(sec))
                 )
             case 'dir_of_name':
                 dir = pos.children[0].value
@@ -366,6 +366,17 @@ class TE_3(Clue):
         cells = self.job_to_cells(self.job)
         cells2 = self.job_to_cells(self.job2)
         return self.predicat_as_many(cells, cells2, self.role, self.role2)
+
+
+class TMP_4(Clue):
+    def __init__(self, tree, name, people, grid):
+        super().__init__(tree, name, people, grid)
+
+    def get_rule(self):
+        cells = self.neighbors(self.name)
+        cells2 = self.pos_to_cells(self.pos)
+        inter = Cell.intersection(cells, cells2)
+        return self.parity_in_zone(inter, self.parity, self.role)
 
 
 class TMP_6(Clue):

@@ -86,7 +86,6 @@ async def main() -> None:
     parser = load_parser([p for p in people.keys()], [p.profession for p in people.values()])
     seen_clues: set[str] = set()
     z3_grid = {(i, j): z3.Bool(f"c_{i} r_{j}") for i in Column.range() for j in Row.range()}
-    print(z3_grid)
     solver = z3.Solver()
     known_inn = set()
     known_crim = set()
@@ -108,6 +107,7 @@ async def main() -> None:
         new_clues = [n for n, person in people.items() if n not in seen_clues and person.clue]
         for name in new_clues:
             try:
+                print(f"{people[name].id} : {people[name].clue}")
                 tree = parser.parse(preprocess_clue(people[name].clue)).children[0]
                 print(tree.data)
             except UnexpectedInput:
