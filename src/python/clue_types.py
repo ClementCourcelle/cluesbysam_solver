@@ -263,6 +263,58 @@ class TA_2(Clue):
         return self.predicat(inter, self.nb, self.role)
 
 
+class TA_3(Clue):
+    def __init__(self, tree, name, people, grid):
+        super().__init__(tree, name, people, grid)
+
+    def get_rule(self):
+        cells = self.neighbors(self.name)
+        cells2 = self.neighbors(self.name2)
+        inter = Cell.intersection(cells, cells2)
+
+        return z3.And(
+            self.predicat(inter, self.nb, self.role), self.predicat(cells, self.nb2, self.role)
+        )
+
+
+class TA_4(Clue):
+    def __init__(self, tree, name, people, grid):
+        super().__init__(tree, name, people, grid)
+
+    def get_rule(self):
+        cells = self.neighbors(self.name)
+        cells2 = self.pos_to_cells(self.pos)
+        inter = Cell.intersection(cells, cells2)
+
+        return (self.predicat(inter, self.nb, self.role),)
+
+
+class TA_5(Clue):
+    def __init__(self, tree, name, people, grid):
+        super().__init__(tree, name, people, grid)
+
+    def get_rule(self):
+        cells = self.job_to_cells(self.job)
+        cells2 = self.pos_to_cells(self.pos)
+        inter = Cell.intersection(cells, cells2)
+
+        return z3.And(
+            self.predicat(inter, self.nb, self.role), self.predicat(cells, self.nb2, self.role)
+        )
+
+
+class TA_6(Clue):
+    def __init__(self, tree, name, people, grid):
+        super().__init__(tree, name, people, grid)
+
+    def get_rule(self):
+        cells = self.job_to_cells(self.job)
+        cells2 = self.pos_to_cells(self.pos)
+        inter = Cell.intersection(cells, cells2)
+
+        return self.predicat(inter, self.nb, self.role)
+
+
 class TB_1(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
@@ -298,6 +350,44 @@ class TB_3(Clue):
         return self.predicat(cells, self.nb, self.role)
 
 
+class TB_4(Clue):
+    def __init__(self, tree, name, people, grid):
+        super().__init__(tree, name, people, grid)
+
+    def get_rule(self):
+        cells = self.neighbors(self.pos)
+        name_cell = self.name_to_cell(self.name)
+        neighbors = Cell.neighbors(name_cell)
+        return z3.And(
+            [self.predicat(neighbors, self.nb, self.role)]
+            + [
+                self.predicat_neq(Cell.neighbors(c), self.nb, self.role)
+                for c in cells
+                if c != name_cell
+            ]
+        )
+
+
+class TB_5(Clue):
+    def __init__(self, tree, name, people, grid):
+        super().__init__(tree, name, people, grid)
+
+    def get_rule(self):
+        cell = self.name_to_cell(self.name)
+        return self.predicat([cell], 1, self.role)
+
+
+class TB_6(Clue):
+    def __init__(self, tree, name, people, grid):
+        super().__init__(tree, name, people, grid)
+
+    def get_rule(self):
+        neighbors = self.neighbors(self.name)
+        cells = self.pos_to_cells(self.pos)
+        inter = Cell.intersection(cells, neighbors)
+        return self.predicat(inter, self.nb, self.role)
+
+
 class TC_1(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
@@ -324,6 +414,44 @@ class TC_3(Clue):
         cells = self.axis.cells(self.coord)
         cells2 = self.axis.cells(self.coord2)
         return self.predicat_more_zone(cells, cells2, self.role)
+
+
+class TC_4(Clue):
+    def __init__(self, tree, name, people, grid):
+        super().__init__(tree, name, people, grid)
+
+    def get_rule(self):
+        cells = self.axis.cells(self.coord)
+        cells2 = self.axis.cells(self.coord2)
+        return self.predicat_more_zone(cells2, cells, self.role)
+
+
+class TC_5(Clue):
+    def __init__(self, tree, name, people, grid):
+        super().__init__(tree, name, people, grid)
+
+    def get_rule(self):
+        cells = self.axis.cells(self.coord)
+        cells2 = self.axis.cells(self.coord2)
+        return self.predicat_as_many(cells, cells2, self.role, self.role)
+
+
+class TC_6(Clue):
+    def __init__(self, tree, name, people, grid):
+        super().__init__(tree, name, people, grid)
+
+    def get_rule(self):
+        cells = self.job_to_cells(self.job)
+        return self.predicat(cells, self.nb, self.role)
+
+
+class TC_7(Clue):
+    def __init__(self, tree, name, people, grid):
+        super().__init__(tree, name, people, grid)
+
+    def get_rule(self):
+        cells = self.job_to_cells(self.job)
+        return self.predicat_more_eq(cells, self.nb, self.role)
 
 
 class TD_1(Clue):
