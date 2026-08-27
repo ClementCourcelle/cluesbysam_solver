@@ -64,9 +64,9 @@ class Cell:
         ]
 
     @staticmethod
-    def zone_directly_dir(cells: list[tuple], dir: str) -> list[tuple]:
+    def zone_directly_dir(cells: list[tuple], dir: str) -> dict[tuple, tuple]:
         """Get cells directly on the direction of input cells"""
-        zone = []
+        zone = {}
         print("ZONE !!!")
         print(f"{cells = }")
         for c in cells:
@@ -76,7 +76,7 @@ class Cell:
             if not dir_of_cell:
                 continue
 
-            zone.append(next(x for x in dir_of_cell if abs(c[0] - x[0] + c[1] - x[1]) == 1))
+            zone[c] = next(x for x in dir_of_cell if abs(c[0] - x[0] + c[1] - x[1]) == 1)
         return zone
 
     @staticmethod

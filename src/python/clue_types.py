@@ -411,7 +411,8 @@ class TMP_11(Clue):
 
     def get_rule(self):
         cells = self.job_to_cells(self.job)
-        return self.predicat(Cell.zone_directly_dir(cells, self.dir), self.nb, self.role)
+        zone_dir = list(Cell.zone_directly_dir(cells, self.dir).values())
+        return self.predicat(zone_dir, self.nb, self.role)
 
 
 class TMP_18(Clue):
@@ -420,7 +421,42 @@ class TMP_18(Clue):
 
     def get_rule(self):
         cells = self.pos_to_cells(self.pos)
-        return self.predicat(Cell.zone_directly_dir(cells, self.dir), self.nb, self.role)
+        zone_dir = list(Cell.zone_directly_dir(cells, self.dir).values())
+        return self.predicat(zone_dir, self.nb, self.role)
+
+
+class TMP_19(Clue):
+    def __init__(self, tree, name, people, grid):
+        super().__init__(tree, name, people, grid)
+
+    def get_rule(self):
+        cells = self.pos_to_cells(self.pos)
+        # zone_dir = list(Cell.zone_directly_dir(cells, self.dir).values())
+        zone_dir = Cell.zone_directly_dir(cells, self.dir)
+        combs = list(combinations(list(zone_dir.items()), self.nb))
+
+        return z3.Or(
+            [
+                z3.And(
+                    [
+                        z3.And(
+                            self.predicat([pair[0]], 1, self.role),
+                            self.predicat([pair[1]], 1, self.role2),
+                        )
+                        for pair in comb
+                    ]
+                    + [
+                        z3.Or(
+                            self.predicat_neq([pair[0]], 1, self.role),
+                            self.predicat_neq([pair[1]], 1, self.role2),
+                        )
+                        for pair in list(zone_dir.items())
+                        if pair not in comb
+                    ]
+                )
+                for comb in combs
+            ]
+        )
 
 
 class TMP_23(Clue):
