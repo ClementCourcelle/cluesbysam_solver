@@ -340,6 +340,27 @@ class TD_1(Clue):
         )
 
 
+class TD_2(Clue):
+    def __init__(self, tree, name, people, grid):
+        super().__init__(tree, name, people, grid)
+
+    def get_rule(self):
+        print("!! AND !!")
+        return z3.Or(
+            [
+                z3.And(
+                    [self.predicat(self.axis.cells(ax_coord), self.nb, self.role)]
+                    + [
+                        self.predicat_neq(self.axis.cells(others), self.nb, self.role)
+                        for others in self.axis.range()
+                        if others != ax_coord
+                    ]
+                )
+                for ax_coord in self.axis.range()
+            ]
+        )
+
+
 class TD_3(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
