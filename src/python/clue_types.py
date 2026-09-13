@@ -26,6 +26,7 @@ class Clue:
         """Return attribute name based on parsed type and existing attributes"""
         var_stem = "pos" if isinstance(element, Tree) else element.type.lower()
         var_stem = "nb" if var_stem == "no" else var_stem
+        var_stem = "name" if var_stem == "my" else var_stem
 
         var_name = var_stem
         suffix = 2
@@ -41,7 +42,7 @@ class Clue:
         if isinstance(element, Tree):
             return element
         if element.type == "AXIS":
-            return Row if element.value == "row" else Column
+            return Row if element.value in ["row", "rows"] else Column
         if element.type == "COORD":
             return (
                 ord(element.value) - ord('a') + 1 if element.value.isalpha() else int(element.value)
@@ -53,10 +54,12 @@ class Clue:
         return element.value
 
     @staticmethod
-    def replace_me_values(node: Tree | Token, name: str) -> Tree | Token:
+    def replace_me_values(node: Tree | Token, name: str) -> Tree | Token:  # TODO: change this
         """Iterate through tree to replace 'me, 'my', 'I' values"""
         if isinstance(node, Token):
+            print(node.type)
             return Token(node.type, name) if node.value in ["me", "I", "my"] else node
+            # return Token("NAME", name) if node.value in ["me", "I", "my"] else node
         for i, child in enumerate(node.children):
             node.children[i] = Clue.replace_me_values(child, name)
         return node
@@ -79,9 +82,6 @@ class Clue:
 
     def predicat(self, cell_indices: list[tuple], n: int, role=Status.INNOCENT):
         """Return rule to assign number of roles to a zone"""
-        print(f"{cell_indices = }")
-        print(f"{n = }")
-        print(f"{role = }")
         cells = [self.grid[c[0], c[1]] for c in cell_indices]
         return (
             z3.Sum([z3.If(c, 1, 0) for c in cells]) == n
@@ -433,6 +433,9 @@ class TC_5(Clue):
     def get_rule(self):
         cells = self.axis.cells(self.coord)
         cells2 = self.axis.cells(self.coord2)
+        print(self.axis)
+        print(cells)
+        print(cells2)
         return self.predicat_as_many(cells, cells2, self.role, self.role)
 
 
@@ -505,6 +508,64 @@ class TD_3(Clue):
         )
 
 
+class TD_4(Clue):
+    def __init__(self, tree, name, people, grid):
+        super().__init__(tree, name, people, grid)
+
+    def get_rule(self):
+        cells = self.axis.cells(self.axis_coord)
+        return z3.And(
+            [
+                self.predicat_more_zone(
+                    self.axis.cells(self.coord), self.axis.cells(other), self.role
+                )
+                for other in self.axis.range()
+                if other != self.axis_coord
+            ]
+        )
+
+
+class TD_5(Clue):
+    def __init__(self, tree, name, people, grid):
+        super().__init__(tree, name, people, grid)
+
+    def get_rule(self):
+        cells = self.axis.cells(self.axis_coord)
+        return z3.And(
+            [
+                self.predicat_more_zone(
+                    self.axis.cells(other), self.axis.cells(self.coord), self.role
+                )
+                for other in self.axis.range()
+                if other != self.axis_coord
+            ]
+        )
+
+
+class TE_1(Clue):
+    def __init__(self, tree, name, people, grid):
+        super().__init__(tree, name, people, grid)
+
+    def get_rule(self):
+        print(f"{self.job = }")
+        print(f"{self.job2 = }")
+        cells = self.job_to_cells(self.job)
+        cells2 = self.job_to_cells(self.job2)
+        return self.predicat_less(cells2, cells, self.role2, self.role)
+
+
+class TE_2(Clue):
+    def __init__(self, tree, name, people, grid):
+        super().__init__(tree, name, people, grid)
+
+    def get_rule(self):
+        print(f"{self.job = }")
+        print(f"{self.job2 = }")
+        cells = self.job_to_cells(self.job)
+        cells2 = self.job_to_cells(self.job2)
+        return self.predicat_less(cells, cells2, self.role, self.role2)
+
+
 class TE_3(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
@@ -515,6 +576,16 @@ class TE_3(Clue):
         cells = self.job_to_cells(self.job)
         cells2 = self.job_to_cells(self.job2)
         return self.predicat_as_many(cells, cells2, self.role, self.role2)
+
+
+# class TMP_2(Clue):
+#     def __init__(self, tree, name, people, grid):
+#         super().__init__(tree, name, people, grid)
+#
+#     def get_rule(self):
+#         cells = self.neighbors(self.name)
+#         cells2 = self.neighbors(self.name2)
+#         return self.parity_as_many(inter, self.parity, self.role)
 
 
 class TMP_4(Clue):
@@ -552,6 +623,17 @@ class TMP_7(Clue):
         return z3.Or(
             [self.split_roles_in_zone(pos_cells, group, self.role) for group in cells_groups]
         )
+
+
+class TMP_9(Clue):
+    def __init__(self, tree, name, people, grid):
+        super().__init__(tree, name, people, grid)
+
+    def get_rule(self):
+        cells = self.neighbors(self.name)
+        cells2 = self.neighbors(self.name2)
+        inter = Cell.intersection(cells, cells2)
+        return self.predicat(inter, self.nb, self.role)
 
 
 class TMP_11(Clue):
