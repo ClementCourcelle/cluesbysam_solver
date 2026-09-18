@@ -1,6 +1,6 @@
 from typing import List, Optional
 from playwright.async_api import async_playwright, Page, Browser, Locator
-from game_state import Person, Status
+from game_elements import Person, Status
 
 
 class GameScraper:

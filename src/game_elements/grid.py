@@ -1,7 +1,3 @@
-from enum import Enum
-from typing import List, Optional
-from pydantic import BaseModel
-
 NB_ROWS = 5
 NB_COLS = 4
 
@@ -151,22 +147,3 @@ class Column:
     def cells(coord: int) -> list[tuple]:
         """Get all cells in one column"""
         return [(coord, i) for i in Column.range_elems()]
-
-
-class Status(str, Enum):
-    UNKNOWN = "unknown"
-    INNOCENT = "innocent"
-    CRIMINAL = "criminal"
-
-
-class Person(BaseModel):
-    id: str  # "A1"
-    name: str
-    profession: str
-    status: Status = Status.UNKNOWN
-    clue: Optional[str] = None  # The clue revealed by this person, if any
-
-
-class GameState(BaseModel):
-    people: List[Person]
-    active_clues: List[str]

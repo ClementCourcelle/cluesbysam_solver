@@ -1,3 +1,4 @@
 /target
+*.egg-info/
 .obsidian/
 __pycache__/

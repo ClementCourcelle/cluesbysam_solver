@@ -1,8 +1,8 @@
-from lark import Tree, Token
 import z3
+from lark import Tree, Token
 from itertools import combinations
 
-from game_state import Cell, Row, Column, Status
+from game_elements import Cell, Row, Column, Status
 
 
 class Clue:

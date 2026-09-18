@@ -4,8 +4,8 @@ import time
 from lark import Lark, UnexpectedInput
 from scraper import GameScraper
 from grammar_loader import GRAMMAR_DIR, load_parser, preprocess_clue
-from clue_types import Clue
-from game_state import Row, Column, Status, Cell
+from interpreter.clue_types import Clue
+from game_elements import Row, Column, Status, Cell
 
 import z3
 
@@ -154,46 +154,46 @@ async def main() -> None:
             print("No solution found !")
 
         # End
-        # for i in new_inn:
-        #     id = Cell.coords_to_id(i)
-        #     await GS.mark_id(id, Status.INNOCENT)
-        #     print(f"clicked {id} inn")
-        # new_inn.clear()
-        #
-        # for c in new_crim:
-        #     id = Cell.coords_to_id(c)
-        #     await GS.mark_id(id, Status.CRIMINAL)
-        #     print(f"clicked {id} crim")
-        # new_crim.clear()
-        #
-        # if len(known_crim) + len(known_inn) == len(z3_grid):
-        #     print("Done !")
-        #     time.sleep(30)
-        #     break
+        for i in new_inn:
+            id = Cell.coords_to_id(i)
+            await GS.mark_id(id, Status.INNOCENT)
+            print(f"clicked {id} inn")
+        new_inn.clear()
+
+        for c in new_crim:
+            id = Cell.coords_to_id(c)
+            await GS.mark_id(id, Status.CRIMINAL)
+            print(f"clicked {id} crim")
+        new_crim.clear()
+
+        if len(known_crim) + len(known_inn) == len(z3_grid):
+            print("Done !")
+            time.sleep(30)
+            break
 
         # # Don't end
-        if len(known_crim) + len(known_inn) != len(z3_grid):
-            for i in new_inn:
-                id = Cell.coords_to_id(i)
-                await GS.mark_id(id, Status.INNOCENT)
-                print(f"clicked {id} inn")
-            new_inn.clear()
+        # if len(known_crim) + len(known_inn) != len(z3_grid):
+        #     for i in new_inn:
+        #         id = Cell.coords_to_id(i)
+        #         await GS.mark_id(id, Status.INNOCENT)
+        #         print(f"clicked {id} inn")
+        #     new_inn.clear()
+        #
+        #     for c in new_crim:
+        #         id = Cell.coords_to_id(c)
+        #         await GS.mark_id(id, Status.CRIMINAL)
+        #         print(f"clicked {id} crim")
+        #     new_crim.clear()
+        #
+        #     if len(known_crim) + len(known_inn) == len(z3_grid):
+        #         print("Done !")
+        #         break
+        #
+        # else:
+        #     time.sleep(30)
 
-            for c in new_crim:
-                id = Cell.coords_to_id(c)
-                await GS.mark_id(id, Status.CRIMINAL)
-                print(f"clicked {id} crim")
-            new_crim.clear()
 
-            if len(known_crim) + len(known_inn) == len(z3_grid):
-                print("Done !")
-                break
-
-        else:
-            time.sleep(30)
-
-
-# async def load_new_indices() -> None:
+# async def main() -> None:
 #     GS = GameScraper(headless=False)
 #     await GS.start()
 #
@@ -206,7 +206,7 @@ async def main() -> None:
 #     round_num = 0
 #
 #     while True:
-# clues = await GS.get_visible_clues()
+#         clues = await GS.get_visible_clues()
 #         new_clues = [c for c in clues if c not in seen_clues]
 #
 #         if new_clues:
