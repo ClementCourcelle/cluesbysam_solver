@@ -1,48 +1,48 @@
 start: clue
 
-clue: _nb "of the" _nb _role pos _BE _super_pos -> ta_1
-  | _nb_no _role pos _BE _super_pos -> ta_2
-  | _nb "of" _name_s _nb _role _NGH "also neighbor" NAME -> ta_3
-  | _nb "of" _name_s _NGH pos _BE _role -> ta_4
-  | _nb "of the" _nb _role _job _BE pos -> ta_5
-  | _nb _role _job _BE pos -> ta_6
-  | NAME "is one of" _nb _role pos -> tb_1
-  | NAME "is one of" _name_s _nb _role _NGH -> tb_2
-  | NAME "has" _nb _role _NGH -> tb_3
-  | NAME "is the only _PERSON" pos "with" _nb _role _NGH -> tb_4
-  | NAME "is" _role -> tb_5
-  | NAME "has" _nb_no _role _NGH pos -> tb_6
-  | _THERE _nb _role pos -> tc_1
-  | _THERE "at least" _nb _role pos -> tc_2
-  | "there are" "more" _role "in" AXIS COORD "than" AXIS COORD -> tc_3
-  | "there are" "less" _role "in" AXIS COORD "than" AXIS COORD -> tc_4
-  | "there's an equal number of" _role "in" AXIS COORD "and" COORD -> tc_5
-  | _THERE _nb _role _job -> tc_6
-  | _THERE "at least" _nb _role _job -> tc_7
-  | "each" AXIS "has at least" _nb _role -> td_1
-  | "only one" AXIS "has" _nb _role -> td_2
-  | AXIS COORD "is the only" AXIS "with" _nb _role -> td_3
-  | AXIS COORD "has" "more" _role "than any other" AXIS -> td_4
-  | AXIS COORD "has" "less" _role "than any other" AXIS -> td_5
-  | "there are" "more" _role _job "than" _role _job -> te_1
-  | "there are" "less" _role _job "than" _role _job -> te_2
-  | "there are as many" _role _job "as there are" _role _job -> te_3
-  | "no one" pos "has" _A_DET _role _NGH -> tf_1
-  | _nb "of the" _nb _job _HAVE _A_DET _role _directly_dir_them -> tmp_10
-  | _nb _job _HAVE _A_DET _role _directly_dir_them -> tmp_11
-  | ALLBOTH _job _BE _role -> tmp_14
-  | NAME "has at least" _nb _role _NGH -> tmp_15
-  | NAME "and" NAME "have an equal number of" _role _NGH -> tmp_17
-  | _nb _PERSON pos _HAVE _A_DET _role _directly_dir_them -> tmp_18
-  | _nb _role pos _HAVE _A_DET _role _directly_dir_them -> tmp_19
-  | NAME "has" _nb "less" _role "neighbor than" NAME -> tmp_2
-  | NAME "is the only one" "with" _nb _role _NGH -> tmp_20
-  | "no one" pos _HAVE "more than" _nb _role _NGH -> tmp_21
-  | "no one" pos _HAVE "less than" _nb _role _NGH -> tmp_22
-  | _nb _PERSON pos _HAVE _nb _role _NGH -> tmp_23
-  | NAME "has" _nb "more" _role "neighbor than" NAME -> tmp_3
-  | "an" PARITY "number of" _role pos "neighbor" NAME -> tmp_4
-  | "an" PARITY "number of" _role pos "are" _name_s _NGH -> tmp_5
-  | _THERE "an" PARITY "number of" _role pos -> tmp_6
-  | ALLBOTH _role pos "are connected" -> tmp_7
-  | NAME "and" NAME "have" _nb_no _role _NGH "in common" -> tmp_9
+clue: _nb "of the" _nb _role pos _BE _super_pos -> t_1
+  | _nb_no _role pos _BE _super_pos -> t_2
+  | _nb "of" _name_s _nb _role _NGH "also neighbor" NAME -> t_3
+  | _nb "of" _name_s _NGH pos _BE _role -> t_4
+  | _nb "of the" _nb _role _job _BE pos -> t_5
+  | _nb _role _job _BE pos -> t_6
+  | NAME "is one of" _nb _role pos -> t_7
+  | NAME "is one of" _name_s _nb _role _NGH -> t_8
+  | NAME "has" _nb _role _NGH -> t_9
+  | NAME "is the only _PERSON" pos "with" _nb _role _NGH -> t_10
+  | NAME "is" _role -> t_11
+  | NAME "has" _nb_no _role _NGH pos -> t_12
+  | _THERE _nb _role pos -> t_13
+  | _THERE "at least" _nb _role pos -> t_14
+  | "there are" "more" _role "in" AXIS COORD "than" AXIS COORD -> t_15
+  | "there are" "less" _role "in" AXIS COORD "than" AXIS COORD -> t_16
+  | "there's an equal number of" _role "in" AXIS COORD "and" COORD -> t_17
+  | _THERE _nb _role _job -> t_18
+  | _THERE "at least" _nb _role _job -> t_19
+  | "each" AXIS "has at least" _nb _role -> t_20
+  | "only one" AXIS "has" _nb _role -> t_21
+  | AXIS COORD "is the only" AXIS "with" _nb _role -> t_22
+  | AXIS COORD "has" "more" _role "than any other" AXIS -> t_23
+  | AXIS COORD "has" "less" _role "than any other" AXIS -> t_24
+  | "there are" "more" _role _job "than" _role _job -> t_25
+  | "there are" "less" _role _job "than" _role _job -> t_26
+  | "there are as many" _role _job "as there are" _role _job -> t_27
+  | "no one" pos "has" _A_DET _role _NGH -> t_28
+  | NAME "has" _nb "less" _role "neighbor than" NAME -> t_29
+  | NAME "has" _nb "more" _role "neighbor than" NAME -> t_30
+  | "an" PARITY "number of" _role pos "neighbor" NAME -> t_31
+  | "an" PARITY "number of" _role pos "are" _name_s _NGH -> t_32
+  | _THERE "an" PARITY "number of" _role pos -> t_33
+  | ALLBOTH _role pos "are connected" -> t_34
+  | NAME "and" NAME "have" _nb_no _role _NGH "in common" -> t_35
+  | _nb "of the" _nb _job _HAVE _A_DET _role _directly_dir_them -> t_36
+  | _nb _job _HAVE _A_DET _role _directly_dir_them -> t_37
+  | ALLBOTH _job _BE _role -> t_38
+  | NAME "has at least" _nb _role _NGH -> t_39
+  | NAME "and" NAME "have an equal number of" _role _NGH -> t_40
+  | _nb _PERSON pos _HAVE _A_DET _role _directly_dir_them -> t_41
+  | _nb _role pos _HAVE _A_DET _role _directly_dir_them -> t_42
+  | NAME "is the only one" "with" _nb _role _NGH -> t_43
+  | "no one" pos _HAVE "more than" _nb _role _NGH -> t_44
+  | "no one" pos _HAVE "less than" _nb _role _NGH -> t_45
+  | _nb _PERSON pos _HAVE _nb _role _NGH -> t_46

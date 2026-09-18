@@ -250,7 +250,7 @@ class Clue:
                 return self.dir_of_name(name, dir)
 
 
-class TA_1(Clue):
+class T_1(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
@@ -258,13 +258,12 @@ class TA_1(Clue):
         cells = self.pos_to_cells(self.pos)
         cells2 = self.pos_to_cells(self.pos2)
         inter = Cell.intersection(cells, cells2)
-        print("!! AND !!")
         return z3.And(
             self.predicat(inter, self.nb, self.role), self.predicat(cells, self.nb2, self.role)
         )
 
 
-class TA_2(Clue):
+class T_2(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
@@ -276,7 +275,7 @@ class TA_2(Clue):
         return self.predicat(inter, self.nb, self.role)
 
 
-class TA_3(Clue):
+class T_3(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
@@ -290,7 +289,7 @@ class TA_3(Clue):
         )
 
 
-class TA_4(Clue):
+class T_4(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
@@ -302,7 +301,7 @@ class TA_4(Clue):
         return (self.predicat(inter, self.nb, self.role),)
 
 
-class TA_5(Clue):
+class T_5(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
@@ -310,13 +309,12 @@ class TA_5(Clue):
         cells = self.job_to_cells(self.job)
         cells2 = self.pos_to_cells(self.pos)
         inter = Cell.intersection(cells, cells2)
-
         return z3.And(
             self.predicat(inter, self.nb, self.role), self.predicat(cells, self.nb2, self.role)
         )
 
 
-class TA_6(Clue):
+class T_6(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
@@ -328,33 +326,31 @@ class TA_6(Clue):
         return self.predicat(inter, self.nb, self.role)
 
 
-class TB_1(Clue):
+class T_7(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
     def get_rule(self):
         cells = self.pos_to_cells(self.pos)
         name_cell = self.name_to_cell(self.name)
-        print("!! AND !!")
         return z3.And(
             self.predicat(cells, self.nb, self.role), self.predicat([name_cell], 1, self.role)
         )
 
 
-class TB_2(Clue):
+class T_8(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
     def get_rule(self):
         cells = self.neighbors(self.name2)
         name_cell = self.name_to_cell(self.name)
-        print("!! AND !!")
         return z3.And(
             self.predicat(cells, self.nb, self.role), self.predicat([name_cell], 1, self.role)
         )
 
 
-class TB_3(Clue):
+class T_9(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
@@ -363,7 +359,7 @@ class TB_3(Clue):
         return self.predicat(cells, self.nb, self.role)
 
 
-class TB_4(Clue):
+class T_10(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
@@ -381,7 +377,7 @@ class TB_4(Clue):
         )
 
 
-class TB_5(Clue):
+class T_11(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
@@ -390,7 +386,7 @@ class TB_5(Clue):
         return self.predicat([cell], 1, self.role)
 
 
-class TB_6(Clue):
+class T_12(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
@@ -401,7 +397,7 @@ class TB_6(Clue):
         return self.predicat(inter, self.nb, self.role)
 
 
-class TC_1(Clue):
+class T_13(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
@@ -410,7 +406,7 @@ class TC_1(Clue):
         return self.predicat(cells, self.nb, self.role)
 
 
-class TC_2(Clue):
+class T_14(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
@@ -419,7 +415,7 @@ class TC_2(Clue):
         return self.predicat_more_eq(cells, self.nb, self.role)
 
 
-class TC_3(Clue):
+class T_15(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
@@ -429,7 +425,7 @@ class TC_3(Clue):
         return self.predicat_more_zone(cells, cells2, self.role)
 
 
-class TC_4(Clue):
+class T_16(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
@@ -439,7 +435,7 @@ class TC_4(Clue):
         return self.predicat_more_zone(cells2, cells, self.role)
 
 
-class TC_5(Clue):
+class T_17(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
@@ -449,7 +445,7 @@ class TC_5(Clue):
         return self.predicat_as_many(cells, cells2, self.role, self.role)
 
 
-class TC_6(Clue):
+class T_18(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
@@ -458,7 +454,7 @@ class TC_6(Clue):
         return self.predicat(cells, self.nb, self.role)
 
 
-class TC_7(Clue):
+class T_19(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
@@ -467,12 +463,11 @@ class TC_7(Clue):
         return self.predicat_more_eq(cells, self.nb, self.role)
 
 
-class TD_1(Clue):
+class T_20(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
     def get_rule(self):
-        print("!! AND !!")
         return z3.And(
             [
                 self.predicat_more_eq(self.axis.cells(ax_coord), self.nb, self.role)
@@ -481,12 +476,11 @@ class TD_1(Clue):
         )
 
 
-class TD_2(Clue):
+class T_21(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
     def get_rule(self):
-        print("!! AND !!")
         return z3.Or(
             [
                 z3.And(
@@ -502,12 +496,11 @@ class TD_2(Clue):
         )
 
 
-class TD_3(Clue):
+class T_22(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
     def get_rule(self):
-        print("!! AND !!")
         return z3.And(
             [self.predicat(self.axis.cells(self.coord), self.nb, self.role)]
             + [
@@ -518,7 +511,7 @@ class TD_3(Clue):
         )
 
 
-class TD_4(Clue):
+class T_23(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
@@ -535,7 +528,7 @@ class TD_4(Clue):
         )
 
 
-class TD_5(Clue):
+class T_24(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
@@ -552,7 +545,7 @@ class TD_5(Clue):
         )
 
 
-class TE_1(Clue):
+class T_25(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
@@ -562,7 +555,7 @@ class TE_1(Clue):
         return self.predicat_less(cells2, cells, self.role2, self.role)
 
 
-class TE_2(Clue):
+class T_26(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
@@ -572,7 +565,7 @@ class TE_2(Clue):
         return self.predicat_less(cells, cells2, self.role, self.role2)
 
 
-class TE_3(Clue):
+class T_27(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
@@ -582,7 +575,7 @@ class TE_3(Clue):
         return self.predicat_as_many(cells, cells2, self.role, self.role2)
 
 
-class TF_1(Clue):
+class T_28(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
@@ -591,7 +584,7 @@ class TF_1(Clue):
         return z3.And([self.predicat(self.neighbors(c), 0, self.role) for c in cells])
 
 
-class TMP_2(Clue):
+class T_29(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
@@ -601,7 +594,7 @@ class TMP_2(Clue):
         return self.predicat_nb_more_zone(cells2, cells, self.role, self.nb)
 
 
-class TMP_3(Clue):
+class T_30(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
@@ -611,7 +604,7 @@ class TMP_3(Clue):
         return self.predicat_nb_more_zone(cells, cells2, self.role, self.nb)
 
 
-class TMP_4(Clue):
+class T_31(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
@@ -622,7 +615,7 @@ class TMP_4(Clue):
         return self.parity_in_zone(inter, self.parity, self.role)
 
 
-class TMP_5(Clue):
+class T_32(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
@@ -633,7 +626,7 @@ class TMP_5(Clue):
         return self.parity_in_zone(inter, self.parity, self.role)
 
 
-class TMP_6(Clue):
+class T_33(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
@@ -642,7 +635,7 @@ class TMP_6(Clue):
         return self.parity_in_zone(cells, self.parity, self.role)
 
 
-class TMP_7(Clue):
+class T_34(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
@@ -653,13 +646,12 @@ class TMP_7(Clue):
         else:
             cells_groups = Cell.any_connected(pos_cells)
 
-        print("OR!!!")
         return z3.Or(
             [self.split_roles_in_zone(pos_cells, group, self.role) for group in cells_groups]
         )
 
 
-class TMP_9(Clue):
+class T_35(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
@@ -670,7 +662,7 @@ class TMP_9(Clue):
         return self.predicat(inter, self.nb, self.role)
 
 
-class TMP_10(Clue):
+class T_36(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
@@ -680,7 +672,7 @@ class TMP_10(Clue):
         return self.predicat(zone_dir, self.nb, self.role)
 
 
-class TMP_11(Clue):
+class T_37(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
@@ -690,7 +682,7 @@ class TMP_11(Clue):
         return self.predicat(zone_dir, self.nb, self.role)
 
 
-class TMP_14(Clue):
+class T_38(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
@@ -699,7 +691,7 @@ class TMP_14(Clue):
         return self.predicat(cells, len(cells), self.role)
 
 
-class TMP_15(Clue):
+class T_39(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
@@ -708,7 +700,7 @@ class TMP_15(Clue):
         return self.predicat_more_eq(cells, self.nb, self.role)
 
 
-class TMP_17(Clue):
+class T_40(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
@@ -718,7 +710,7 @@ class TMP_17(Clue):
         return self.predicat_as_many(cells, cells2, self.role)
 
 
-class TMP_18(Clue):
+class T_41(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
@@ -728,7 +720,7 @@ class TMP_18(Clue):
         return self.predicat(zone_dir, self.nb, self.role)
 
 
-class TMP_19(Clue):
+class T_42(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
@@ -762,7 +754,7 @@ class TMP_19(Clue):
         )
 
 
-class TMP_20(Clue):
+class T_43(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
@@ -779,7 +771,7 @@ class TMP_20(Clue):
         )
 
 
-class TMP_21(Clue):
+class T_44(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
@@ -790,7 +782,7 @@ class TMP_21(Clue):
         )
 
 
-class TMP_22(Clue):
+class T_45(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
@@ -799,7 +791,7 @@ class TMP_22(Clue):
         return z3.And([self.predicat_more_eq(Cell.neighbors(c), self.nb, self.role) for c in cells])
 
 
-class TMP_23(Clue):
+class T_46(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
