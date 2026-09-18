@@ -2,7 +2,8 @@ import z3
 from lark import Tree, Token
 from itertools import combinations
 
-from game_elements import Cell, Row, Column, Status
+from game_elements import Cell, Row, Column
+from interpreter import *
 
 
 class Clue:
@@ -11,10 +12,9 @@ class Clue:
     def __init_subclass__(cls):
         Clue.types[cls.__name__] = cls
 
-    def __init__(self, tree: Tree, name: str, people: dict, grid: dict):
+    def __init__(self, tree: Tree, name: str, people: dict):
         var_names = []
         self.people = people
-        self.grid = grid
         for c in tree.children:
             attr_name = Clue.get_available_name(var_names, c)
             var_names.append(attr_name)
@@ -80,129 +80,6 @@ class Clue:
         """Get cells of person with job"""
         return [Cell.id_to_coords(p.id) for p in self.people.values() if p.profession == job]
 
-    def predicat(self, cell_indices: list[tuple], n: int, role=Status.INNOCENT):
-        """Return rule to assign number of roles to a zone"""
-        cells = [self.grid[c[0], c[1]] for c in cell_indices]
-        return (
-            z3.Sum([z3.If(c, 1, 0) for c in cells]) == n
-            if role == Status.INNOCENT
-            else self.predicat(cell_indices, len(cells) - n)
-        )
-
-    def predicat_neq(self, cell_indices: list[tuple], n: int, role=Status.INNOCENT):
-        """Return rule to forbid number of roles to a zone"""
-        print(f"NON EQUAL")
-        print(f"{cell_indices = }")
-        print(f"{n = }")
-        print(f"{role = }")
-        cells = [self.grid[c[0], c[1]] for c in cell_indices]
-        return (
-            z3.Sum([z3.If(c, 1, 0) for c in cells]) != n
-            if role == Status.INNOCENT
-            else self.predicat_neq(cell_indices, len(cells) - n)
-        )
-
-    def predicat_less(self, cell_indices: list[tuple], n: int, role=Status.INNOCENT):
-        """Return rule to assign maximum number of roles to a zone"""
-        print(f"MORE")
-        print(f"{cell_indices = }")
-        print(f"{n = }")
-        print(f"{role = }")
-        cells = [self.grid[c[0], c[1]] for c in cell_indices]
-        return (
-            z3.Sum([z3.If(c, 1, 0) for c in cells]) < n
-            if role == Status.INNOCENT
-            else z3.Sum([z3.If(c, 1, 0) for c in cells]) >= len(cells) - n
-        )
-
-    def predicat_more_eq(self, cell_indices: list[tuple], n: int, role=Status.INNOCENT):
-        """Return rule to assign minimum number of roles to a zone"""
-        print(f"MORE")
-        print(f"{cell_indices = }")
-        print(f"{n = }")
-        print(f"{role = }")
-        cells = [self.grid[c[0], c[1]] for c in cell_indices]
-        return (
-            z3.Sum([z3.If(c, 1, 0) for c in cells]) >= n
-            if role == Status.INNOCENT
-            else z3.Sum([z3.If(c, 1, 0) for c in cells]) < len(cells) - n
-        )
-
-    def predicat_more_zone(
-        self, cell_indices: list[tuple], cell_indices2: list[tuple], role: Status
-    ):
-        """Return rule to assign more roles in cells than cells2"""
-        print(f"MORE")
-        cells = [self.grid[c[0], c[1]] for c in cell_indices]
-        cells2 = [self.grid[c[0], c[1]] for c in cell_indices2]
-        sum = (
-            z3.Sum([z3.If(c, 1, 0) for c in cells])
-            if role == Status.INNOCENT
-            else z3.Sum([z3.If(c, 0, 1) for c in cells])
-        )
-        sum2 = (
-            z3.Sum([z3.If(c, 1, 0) for c in cells2])
-            if role == Status.INNOCENT
-            else z3.Sum([z3.If(c, 0, 1) for c in cells2])
-        )
-        return sum > sum2
-
-    def predicat_as_many(
-        self, cell_indices: list[tuple], cell_indices2: list[tuple], role: Status, role2: Status
-    ):
-        """Return rule to assign as many roles in two zones"""
-        print(f"AS MANY")
-        cells = [self.grid[c[0], c[1]] for c in cell_indices]
-        cells2 = [self.grid[c[0], c[1]] for c in cell_indices2]
-        sum = (
-            z3.Sum([z3.If(c, 1, 0) for c in cells])
-            if role == Status.INNOCENT
-            else z3.Sum([z3.If(c, 0, 1) for c in cells])
-        )
-        sum2 = (
-            z3.Sum([z3.If(c, 1, 0) for c in cells2])
-            if role == Status.INNOCENT
-            else z3.Sum([z3.If(c, 0, 1) for c in cells2])
-        )
-        return sum == sum2
-
-    def predicat_nb_more_zone(
-        self, cell_indices: list[tuple], cell_indices2: list[tuple], role: Status, nb: int
-    ):
-        """Return rule to assign nb more roles in cells than cells2"""
-        print(f"MORE")
-        cells = [self.grid[c[0], c[1]] for c in cell_indices]
-        cells2 = [self.grid[c[0], c[1]] for c in cell_indices2]
-        sum = (
-            z3.Sum([z3.If(c, 1, 0) for c in cells])
-            if role == Status.INNOCENT
-            else z3.Sum([z3.If(c, 0, 1) for c in cells])
-        )
-        sum2 = (
-            z3.Sum([z3.If(c, 1, 0) for c in cells2])
-            if role == Status.INNOCENT
-            else z3.Sum([z3.If(c, 0, 1) for c in cells2])
-        )
-        return sum == sum2 + nb
-
-    def split_roles_in_zone(self, zone, zone_role, role):
-        """Return rule that assigns all the roles cells to to one part of a zone"""  # pire commentaire
-        print("!! AND !!")
-        return z3.And(
-            self.predicat(zone_role, len(zone_role), role),
-            self.predicat(zone, len(zone_role), role),
-        )
-
-    def or_range_predicat(self, cell_indices: list[tuple], range: range, role=Status.INNOCENT):
-        """Return OR rules with range of possible number of roles"""  # 2e pire commentaire
-        print("!! OR !!")
-        return z3.Or([self.predicat(cell_indices, i, role) for i in range])
-
-    def parity_in_zone(self, cell_indices: list[tuple], parity: str, role=Status.INNOCENT):
-        """Return rules with possible role values based on parity"""  # 3e pire commentaire
-        start = 0 if parity == 'even' else 1
-        return self.or_range_predicat(cell_indices, range(start, len(cell_indices), 2), role)
-
     def pos_to_cells(self, pos: Tree) -> list[tuple]:
         """Get cells from position tree"""
         type = pos.data
@@ -256,7 +133,8 @@ class T_1(Clue):
         cells2 = self.pos_to_cells(self.pos2)
         inter = Cell.intersection(cells, cells2)
         return z3.And(
-            self.predicat(inter, self.nb, self.role), self.predicat(cells, self.nb2, self.role)
+            predicat(inter, self.nb, self.role),
+            predicat(cells, self.nb2, self.role),
         )
 
 
@@ -266,7 +144,7 @@ class T_2(Clue):
         cells2 = self.pos_to_cells(self.pos2)
         inter = Cell.intersection(cells, cells2)
 
-        return self.predicat(inter, self.nb, self.role)
+        return predicat(inter, self.nb, self.role)
 
 
 class T_3(Clue):
@@ -276,7 +154,8 @@ class T_3(Clue):
         inter = Cell.intersection(cells, cells2)
 
         return z3.And(
-            self.predicat(inter, self.nb, self.role), self.predicat(cells, self.nb2, self.role)
+            predicat(inter, self.nb, self.role),
+            predicat(cells, self.nb2, self.role),
         )
 
 
@@ -286,7 +165,7 @@ class T_4(Clue):
         cells2 = self.pos_to_cells(self.pos)
         inter = Cell.intersection(cells, cells2)
 
-        return (self.predicat(inter, self.nb, self.role),)
+        return (predicat(inter, self.nb, self.role),)
 
 
 class T_5(Clue):
@@ -295,7 +174,8 @@ class T_5(Clue):
         cells2 = self.pos_to_cells(self.pos)
         inter = Cell.intersection(cells, cells2)
         return z3.And(
-            self.predicat(inter, self.nb, self.role), self.predicat(cells, self.nb2, self.role)
+            predicat(inter, self.nb, self.role),
+            predicat(cells, self.nb2, self.role),
         )
 
 
@@ -305,7 +185,7 @@ class T_6(Clue):
         cells2 = self.pos_to_cells(self.pos)
         inter = Cell.intersection(cells, cells2)
 
-        return self.predicat(inter, self.nb, self.role)
+        return predicat(inter, self.nb, self.role)
 
 
 class T_7(Clue):
@@ -313,7 +193,8 @@ class T_7(Clue):
         cells = self.pos_to_cells(self.pos)
         name_cell = self.name_to_cell(self.name)
         return z3.And(
-            self.predicat(cells, self.nb, self.role), self.predicat([name_cell], 1, self.role)
+            predicat(cells, self.nb, self.role),
+            predicat([name_cell], 1, self.role),
         )
 
 
@@ -322,14 +203,15 @@ class T_8(Clue):
         cells = self.neighbors(self.name2)
         name_cell = self.name_to_cell(self.name)
         return z3.And(
-            self.predicat(cells, self.nb, self.role), self.predicat([name_cell], 1, self.role)
+            predicat(cells, self.nb, self.role),
+            predicat([name_cell], 1, self.role),
         )
 
 
 class T_9(Clue):
     def get_rule(self):
         cells = self.neighbors(self.name)
-        return self.predicat(cells, self.nb, self.role)
+        return predicat(cells, self.nb, self.role)
 
 
 class T_10(Clue):
@@ -338,19 +220,15 @@ class T_10(Clue):
         name_cell = self.name_to_cell(self.name)
         neighbors = Cell.neighbors(name_cell)
         return z3.And(
-            [self.predicat(neighbors, self.nb, self.role)]
-            + [
-                self.predicat_neq(Cell.neighbors(c), self.nb, self.role)
-                for c in cells
-                if c != name_cell
-            ]
+            [predicat(neighbors, self.nb, self.role)]
+            + [predicat_neq(Cell.neighbors(c), self.nb, self.role) for c in cells if c != name_cell]
         )
 
 
 class T_11(Clue):
     def get_rule(self):
         cell = self.name_to_cell(self.name)
-        return self.predicat([cell], 1, self.role)
+        return predicat([cell], 1, self.role)
 
 
 class T_12(Clue):
@@ -358,59 +236,59 @@ class T_12(Clue):
         neighbors = self.neighbors(self.name)
         cells = self.pos_to_cells(self.pos)
         inter = Cell.intersection(cells, neighbors)
-        return self.predicat(inter, self.nb, self.role)
+        return predicat(inter, self.nb, self.role)
 
 
 class T_13(Clue):
     def get_rule(self):
         cells = self.pos_to_cells(self.pos)
-        return self.predicat(cells, self.nb, self.role)
+        return predicat(cells, self.nb, self.role)
 
 
 class T_14(Clue):
     def get_rule(self):
         cells = self.pos_to_cells(self.pos)
-        return self.predicat_more_eq(cells, self.nb, self.role)
+        return predicat_more_eq(cells, self.nb, self.role)
 
 
 class T_15(Clue):
     def get_rule(self):
         cells = self.axis.cells(self.coord)
         cells2 = self.axis.cells(self.coord2)
-        return self.predicat_more_zone(cells, cells2, self.role)
+        return predicat_more_zone(cells, cells2, self.role)
 
 
 class T_16(Clue):
     def get_rule(self):
         cells = self.axis.cells(self.coord)
         cells2 = self.axis.cells(self.coord2)
-        return self.predicat_more_zone(cells2, cells, self.role)
+        return predicat_more_zone(cells2, cells, self.role)
 
 
 class T_17(Clue):
     def get_rule(self):
         cells = self.axis.cells(self.coord)
         cells2 = self.axis.cells(self.coord2)
-        return self.predicat_as_many(cells, cells2, self.role, self.role)
+        return predicat_as_many(cells, cells2, self.role, self.role)
 
 
 class T_18(Clue):
     def get_rule(self):
         cells = self.job_to_cells(self.job)
-        return self.predicat(cells, self.nb, self.role)
+        return predicat(cells, self.nb, self.role)
 
 
 class T_19(Clue):
     def get_rule(self):
         cells = self.job_to_cells(self.job)
-        return self.predicat_more_eq(cells, self.nb, self.role)
+        return predicat_more_eq(cells, self.nb, self.role)
 
 
 class T_20(Clue):
     def get_rule(self):
         return z3.And(
             [
-                self.predicat_more_eq(self.axis.cells(ax_coord), self.nb, self.role)
+                predicat_more_eq(self.axis.cells(ax_coord), self.nb, self.role)
                 for ax_coord in self.axis.range()
             ]
         )
@@ -421,9 +299,9 @@ class T_21(Clue):
         return z3.Or(
             [
                 z3.And(
-                    [self.predicat(self.axis.cells(ax_coord), self.nb, self.role)]
+                    [predicat(self.axis.cells(ax_coord), self.nb, self.role)]
                     + [
-                        self.predicat_neq(self.axis.cells(others), self.nb, self.role)
+                        predicat_neq(self.axis.cells(others), self.nb, self.role)
                         for others in self.axis.range()
                         if others != ax_coord
                     ]
@@ -436,9 +314,9 @@ class T_21(Clue):
 class T_22(Clue):
     def get_rule(self):
         return z3.And(
-            [self.predicat(self.axis.cells(self.coord), self.nb, self.role)]
+            [predicat(self.axis.cells(self.coord), self.nb, self.role)]
             + [
-                self.predicat_neq(self.axis.cells(ax_coord), self.nb, self.role)
+                predicat_neq(self.axis.cells(ax_coord), self.nb, self.role)
                 for ax_coord in self.axis.range()
                 if ax_coord != self.coord
             ]
@@ -450,9 +328,7 @@ class T_23(Clue):
         cells = self.axis.cells(self.axis_coord)
         return z3.And(
             [
-                self.predicat_more_zone(
-                    self.axis.cells(self.coord), self.axis.cells(other), self.role
-                )
+                predicat_more_zone(self.axis.cells(self.coord), self.axis.cells(other), self.role)
                 for other in self.axis.range()
                 if other != self.axis_coord
             ]
@@ -464,54 +340,52 @@ class T_24(Clue):
         cells = self.axis.cells(self.axis_coord)
         return z3.And(
             [
-                self.predicat_more_zone(
-                    self.axis.cells(other), self.axis.cells(self.coord), self.role
-                )
+                predicat_more_zone(self.axis.cells(other), self.axis.cells(self.coord), self.role)
                 for other in self.axis.range()
                 if other != self.axis_coord
             ]
         )
 
 
-class T_25(Clue):
+class T_25(Clue):  # TODO: Fix
     def get_rule(self):
         cells = self.job_to_cells(self.job)
         cells2 = self.job_to_cells(self.job2)
-        return self.predicat_less(cells2, cells, self.role2, self.role)
+        return predicat_less(cells2, cells, self.role2, self.role)
 
 
-class T_26(Clue):
+class T_26(Clue):  # TODO: Fix
     def get_rule(self):
         cells = self.job_to_cells(self.job)
         cells2 = self.job_to_cells(self.job2)
-        return self.predicat_less(cells, cells2, self.role, self.role2)
+        return predicat_less(cells, cells2, self.role, self.role2)
 
 
 class T_27(Clue):
     def get_rule(self):
         cells = self.job_to_cells(self.job)
         cells2 = self.job_to_cells(self.job2)
-        return self.predicat_as_many(cells, cells2, self.role, self.role2)
+        return predicat_as_many(cells, cells2, self.role, self.role2)
 
 
 class T_28(Clue):
     def get_rule(self):
         cells = self.pos_to_cells(self.pos)
-        return z3.And([self.predicat(self.neighbors(c), 0, self.role) for c in cells])
+        return z3.And([predicat(self.neighbors(c), 0, self.role) for c in cells])
 
 
 class T_29(Clue):
     def get_rule(self):
         cells = self.neighbors(self.name)
         cells2 = self.neighbors(self.name2)
-        return self.predicat_nb_more_zone(cells2, cells, self.role, self.nb)
+        return predicat_nb_more_zone(cells2, cells, self.role, self.nb)
 
 
 class T_30(Clue):
     def get_rule(self):
         cells = self.neighbors(self.name)
         cells2 = self.neighbors(self.name2)
-        return self.predicat_nb_more_zone(cells, cells2, self.role, self.nb)
+        return predicat_nb_more_zone(cells, cells2, self.role, self.nb)
 
 
 class T_31(Clue):
@@ -519,7 +393,7 @@ class T_31(Clue):
         cells = self.neighbors(self.name)
         cells2 = self.pos_to_cells(self.pos)
         inter = Cell.intersection(cells, cells2)
-        return self.parity_in_zone(inter, self.parity, self.role)
+        return parity_in_zone(inter, self.parity, self.role)
 
 
 class T_32(Clue):
@@ -527,13 +401,13 @@ class T_32(Clue):
         cells = self.neighbors(self.name)
         cells2 = self.pos_to_cells(self.pos)
         inter = Cell.intersection(cells, cells2)
-        return self.parity_in_zone(inter, self.parity, self.role)
+        return parity_in_zone(inter, self.parity, self.role)
 
 
 class T_33(Clue):
     def get_rule(self):
         cells = self.pos_to_cells(self.pos)
-        return self.parity_in_zone(cells, self.parity, self.role)
+        return parity_in_zone(cells, self.parity, self.role)
 
 
 class T_34(Clue):
@@ -544,9 +418,7 @@ class T_34(Clue):
         else:
             cells_groups = Cell.any_connected(pos_cells)
 
-        return z3.Or(
-            [self.split_roles_in_zone(pos_cells, group, self.role) for group in cells_groups]
-        )
+        return z3.Or([split_roles_in_zone(pos_cells, group, self.role) for group in cells_groups])
 
 
 class T_35(Clue):
@@ -554,47 +426,47 @@ class T_35(Clue):
         cells = self.neighbors(self.name)
         cells2 = self.neighbors(self.name2)
         inter = Cell.intersection(cells, cells2)
-        return self.predicat(inter, self.nb, self.role)
+        return predicat(inter, self.nb, self.role)
 
 
 class T_36(Clue):
     def get_rule(self):
         cells = self.pos_to_cells(self.pos)
         zone_dir = list(Cell.zone_directly_dir(cells, self.dir).values())
-        return self.predicat(zone_dir, self.nb, self.role)
+        return predicat(zone_dir, self.nb, self.role)
 
 
 class T_37(Clue):
     def get_rule(self):
         cells = self.job_to_cells(self.job)
         zone_dir = list(Cell.zone_directly_dir(cells, self.dir).values())
-        return self.predicat(zone_dir, self.nb, self.role)
+        return predicat(zone_dir, self.nb, self.role)
 
 
 class T_38(Clue):
     def get_rule(self):
         cells = self.job_to_cells(self.job)
-        return self.predicat(cells, len(cells), self.role)
+        return predicat(cells, len(cells), self.role)
 
 
 class T_39(Clue):
     def get_rule(self):
         cells = self.neighbors(self.name)
-        return self.predicat_more_eq(cells, self.nb, self.role)
+        return predicat_more_eq(cells, self.nb, self.role)
 
 
-class T_40(Clue):
+class T_40(Clue):  # TODO: fix
     def get_rule(self):
         cells = self.neighbors(self.name)
         cells2 = self.neighbors(self.name2)
-        return self.predicat_as_many(cells, cells2, self.role)
+        return predicat_as_many(cells, cells2, self.role)
 
 
 class T_41(Clue):
     def get_rule(self):
         cells = self.pos_to_cells(self.pos)
         zone_dir = list(Cell.zone_directly_dir(cells, self.dir).values())
-        return self.predicat(zone_dir, self.nb, self.role)
+        return predicat(zone_dir, self.nb, self.role)
 
 
 class T_42(Clue):
@@ -609,15 +481,15 @@ class T_42(Clue):
                 z3.And(
                     [
                         z3.And(
-                            self.predicat([pair[0]], 1, self.role),
-                            self.predicat([pair[1]], 1, self.role2),
+                            predicat([pair[0]], 1, self.role),
+                            predicat([pair[1]], 1, self.role2),
                         )
                         for pair in comb
                     ]
                     + [
                         z3.Or(
-                            self.predicat_neq([pair[0]], 1, self.role),
-                            self.predicat_neq([pair[1]], 1, self.role2),
+                            predicat_neq([pair[0]], 1, self.role),
+                            predicat_neq([pair[1]], 1, self.role2),
                         )
                         for pair in list(zone_dir.items())
                         if pair not in comb
@@ -633,9 +505,9 @@ class T_43(Clue):
         name_cell = self.name_to_cell(self.name)
         cells = self.neighbors(self.name)
         return z3.And(
-            [self.predicat(cells, self.nb, self.role)]
+            [predicat(cells, self.nb, self.role)]
             + [
-                self.predicat_neq(Cell.neighbors(c), self.nb, self.role)
+                predicat_neq(Cell.neighbors(c), self.nb, self.role)
                 for c in Cell.all_cells()
                 if c != name_cell
             ]
@@ -645,15 +517,13 @@ class T_43(Clue):
 class T_44(Clue):
     def get_rule(self):
         cells = self.pos_to_cells(self.pos)
-        return z3.And(
-            [self.predicat_less(Cell.neighbors(c), self.nb + 1, self.role) for c in cells]
-        )
+        return z3.And([predicat_less(Cell.neighbors(c), self.nb + 1, self.role) for c in cells])
 
 
 class T_45(Clue):
     def get_rule(self):
         cells = self.pos_to_cells(self.pos)
-        return z3.And([self.predicat_more_eq(Cell.neighbors(c), self.nb, self.role) for c in cells])
+        return z3.And([predicat_more_eq(Cell.neighbors(c), self.nb, self.role) for c in cells])
 
 
 class T_46(Clue):
@@ -664,12 +534,8 @@ class T_46(Clue):
         return z3.Or(
             [
                 z3.And(
-                    [self.predicat(n, self.nb2, self.role) for n in neighbors if n in comb]
-                    + [
-                        self.predicat_neq(n, self.nb2, self.role)
-                        for n in neighbors
-                        if n not in comb
-                    ]
+                    [predicat(n, self.nb2, self.role) for n in neighbors if n in comb]
+                    + [predicat_neq(n, self.nb2, self.role) for n in neighbors if n not in comb]
                 )
                 for comb in combs
             ]

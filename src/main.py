@@ -1,10 +1,12 @@
 import asyncio
 import time
-
 from lark import Lark, UnexpectedInput
+from sortedcontainers import SortedSet
+
 from scraper import GameScraper
 from grammar_loader import GRAMMAR_DIR, load_parser, preprocess_clue
 from interpreter.clue_types import Clue
+from interpreter.constraints import Constraint
 from game_elements import Row, Column, Status, Cell
 
 import z3
@@ -86,20 +88,21 @@ async def main() -> None:
     parser = load_parser([p for p in people.keys()], [p.profession for p in people.values()])
     seen_clues: set[str] = set()
     z3_grid = {(i, j): z3.Bool(f"c_{i} r_{j}") for i in Column.range() for j in Row.range()}
+    Constraint.grid = z3_grid
     solver = z3.Solver()
-    known_inn = set()
-    known_crim = set()
+    known_cells = SortedSet()
+    # known_inn = set()
+    # known_crim = set()
     new_inn = set()
     new_crim = set()
 
-    # put first visible cell in known cells
+    # put first visible cell in known cells and add rule to solver
     for p in people.values():
         if p.clue:
             c = Cell.id_to_coords(p.id)
-            known_inn.add(c) if p.status == Status.INNOCENT else known_crim.add(c)
+            known_cells.add(c)
+            solver.add(z3_grid[c[0], c[1]] == True if p.status == Status.INNOCENT else False)
             break
-    # add first visible persone to the solver
-    solver.add(z3_grid[c[0], c[1]] == True)
 
     while True:
         # interpret new clues as z3 rules
@@ -115,7 +118,7 @@ async def main() -> None:
                 print(f"Not a clue: {people[name].clue}")
                 continue
             clue_type = tree.data.upper()
-            solver.add(Clue.types[clue_type](tree, name, people, z3_grid).get_rule())
+            solver.add(Clue.types[clue_type](tree, name, people).get_rule())
             seen_clues.add(name)
         new_clues.clear()
 
@@ -123,7 +126,8 @@ async def main() -> None:
         for i in Column.range():
             for j in Row.range():
                 tested_case = (i, j)
-                if tested_case in known_inn.union(known_crim):
+                # if tested_case in known_inn.union(known_crim):
+                if tested_case in known_cells:
                     continue
 
                 for is_inn in [True, False]:
@@ -142,12 +146,10 @@ async def main() -> None:
 
                     solver.pop()
 
-                    known_inn.update(new_inn)
-                    known_crim.update(new_crim)
+                    known_cells.update(new_inn)
+                    known_cells.update(new_crim)
                     print(f"{new_inn = }")
                     print(f"{new_crim = }")
-                    print(f"{known_inn = }")
-                    print(f"{known_crim = }")
                     print("\n\n\n")
 
         if not new_inn and not new_crim:
@@ -166,7 +168,7 @@ async def main() -> None:
             print(f"clicked {id} crim")
         new_crim.clear()
 
-        if len(known_crim) + len(known_inn) == len(z3_grid):
+        if len(known_cells) == len(z3_grid):
             print("Done !")
             time.sleep(30)
             break
