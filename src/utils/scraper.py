@@ -44,34 +44,34 @@ class GameScraper:
         """Scrape the current state of all 20 people."""
         people = {}
 
-        # Iterate through all card containers in the grid
-        cards = self.page.locator(".card-container .card")
-        count = await cards.count()
+        # Extract the raw data of every card in a single browser round trip
+        cards = await self.page.eval_on_selector_all(
+            ".card-container .card",
+            """cards => cards.map(card => {
+                const text = sel => {
+                    const el = card.querySelector(sel);
+                    return el ? el.textContent : null;
+                };
+                return {
+                    coord: text(".coord"),
+                    name: text("h3.name"),
+                    profession: text(".profession"),
+                    classes: card.getAttribute("class"),
+                    hint: text(".hint"),
+                };
+            })""",
+        )
 
-        if count == 0:
+        if not cards:
             return []
 
-        for i in range(count):
-            card = cards.nth(i)
+        for card in cards:
+            coord = card["coord"].strip()
+            name = card["name"].strip().title().lower()
+            profession = self._extract_profession(card["profession"]).lower()
 
-            # Extract ID (Coordinate)
-            coord_el = card.locator(".coord")
-            coord = await coord_el.text_content()
-            coord = coord.strip()
-
-            # Extract Name
-            name_el = card.locator("h3.name")
-            name = await name_el.text_content()
-            name = name.strip().title().lower()
-
-            # Extract Profession
-            prof_el = card.locator(".profession")
-            profession_str = await prof_el.text_content()
-            profession = self._extract_profession(profession_str).lower()
-
-            # Extract Status & Clue
             # Check classes on the card div
-            classes = await card.get_attribute("class")
+            classes = card["classes"]
             status = Status.UNKNOWN
             clue_text = None
 
@@ -80,43 +80,98 @@ class GameScraper:
             elif "criminal" in classes:
                 status = Status.CRIMINAL
 
-            # Check for clue on the back if the card is flipped/revealed
+            # Clue is on the back if the card is flipped/revealed
             if status != Status.UNKNOWN:
-                clue_el = card.locator(".hint")
-                if await clue_el.count() > 0:
-                    clue_text = await clue_el.text_content()
+                clue_text = card["hint"]
 
-            # Parse Row/Col from Coord
-            # col = coord[0]
-            # row = int(coord[1])
-
-            person = Person(
+            people[name] = Person(
                 id=coord,
                 name=name,
                 profession=profession,
-                # row=row,
-                # col=col,
                 status=status,
                 clue=clue_text,
             )
-            people[name] = person
 
-        # Calculate neighbors for each person
-        # for p in people:
-        #     p.neighbors = []
-        #     for other in people:
-        #         if p.name == other.name:
-        #             continue
-        #
-        #         row_diff = abs(p.row - other.row)
-        #         col_p = ord(p.col) - ord("A")
-        #         col_o = ord(other.col) - ord("A")
-        #         col_diff = abs(col_p - col_o)
-        #
-        #         if row_diff <= 1 and col_diff <= 1:
-        #             p.neighbors.append(other.name)
-        #
         return people
+
+    # Previous version: one browser round trip per field and per card (~100 awaits)
+    # async def get_grid_state(self) -> List[Person]:
+    #     """Scrape the current state of all 20 people."""
+    #     people = {}
+    #
+    #     # Iterate through all card containers in the grid
+    #     cards = self.page.locator(".card-container .card")
+    #     count = await cards.count()
+    #
+    #     if count == 0:
+    #         return []
+    #
+    #     for i in range(count):
+    #         card = cards.nth(i)
+    #
+    #         # Extract ID (Coordinate)
+    #         coord_el = card.locator(".coord")
+    #         coord = await coord_el.text_content()
+    #         coord = coord.strip()
+    #
+    #         # Extract Name
+    #         name_el = card.locator("h3.name")
+    #         name = await name_el.text_content()
+    #         name = name.strip().title().lower()
+    #
+    #         # Extract Profession
+    #         prof_el = card.locator(".profession")
+    #         profession_str = await prof_el.text_content()
+    #         profession = self._extract_profession(profession_str).lower()
+    #
+    #         # Extract Status & Clue
+    #         # Check classes on the card div
+    #         classes = await card.get_attribute("class")
+    #         status = Status.UNKNOWN
+    #         clue_text = None
+    #
+    #         if "innocent" in classes:
+    #             status = Status.INNOCENT
+    #         elif "criminal" in classes:
+    #             status = Status.CRIMINAL
+    #
+    #         # Check for clue on the back if the card is flipped/revealed
+    #         if status != Status.UNKNOWN:
+    #             clue_el = card.locator(".hint")
+    #             if await clue_el.count() > 0:
+    #                 clue_text = await clue_el.text_content()
+    #
+    #         # Parse Row/Col from Coord
+    #         # col = coord[0]
+    #         # row = int(coord[1])
+    #
+    #         person = Person(
+    #             id=coord,
+    #             name=name,
+    #             profession=profession,
+    #             # row=row,
+    #             # col=col,
+    #             status=status,
+    #             clue=clue_text,
+    #         )
+    #         people[name] = person
+    #
+    #     # Calculate neighbors for each person
+    #     # for p in people:
+    #     #     p.neighbors = []
+    #     #     for other in people:
+    #     #         if p.name == other.name:
+    #     #             continue
+    #     #
+    #     #         row_diff = abs(p.row - other.row)
+    #     #         col_p = ord(p.col) - ord("A")
+    #     #         col_o = ord(other.col) - ord("A")
+    #     #         col_diff = abs(col_p - col_o)
+    #     #
+    #     #         if row_diff <= 1 and col_diff <= 1:
+    #     #             p.neighbors.append(other.name)
+    #     #
+    #     return people
 
     async def get_visible_clues(self) -> List[str]:
         """Extract text of all currently visible clues."""
@@ -150,7 +205,9 @@ class GameScraper:
         else:
             btn = modal.locator("button.btn-criminal")
 
-        if await btn.is_visible():
+        btn_visible = await btn.is_visible()
+
+        if btn_visible:
             await btn.click()
             # Wait for modal to close
             await modal.wait_for(state="hidden")
