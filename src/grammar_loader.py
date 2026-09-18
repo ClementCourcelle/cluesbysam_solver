@@ -4,7 +4,7 @@ from pathlib import Path
 
 from lark import Lark
 
-GRAMMAR_DIR = Path(__file__).parent.parent.parent / "grammar"
+GRAMMAR_DIR = Path(__file__).parent.parent / "grammar"
 
 
 def cell_to_lark(cell: str) -> str:
