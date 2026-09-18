@@ -133,9 +133,6 @@ class Clue:
     ):
         """Return rule to assign more roles in cells than cells2"""
         print(f"MORE")
-        print(f"{cell_indices = }")
-        print(f"{cell_indices2 = }")
-        print(f"{role = }")
         cells = [self.grid[c[0], c[1]] for c in cell_indices]
         cells2 = [self.grid[c[0], c[1]] for c in cell_indices2]
         sum = (
@@ -155,9 +152,6 @@ class Clue:
     ):
         """Return rule to assign as many roles in two zones"""
         print(f"AS MANY")
-        print(f"{cell_indices = }")
-        print(f"{cell_indices2 = }")
-        print(f"{role = }")
         cells = [self.grid[c[0], c[1]] for c in cell_indices]
         cells2 = [self.grid[c[0], c[1]] for c in cell_indices2]
         sum = (
@@ -171,6 +165,25 @@ class Clue:
             else z3.Sum([z3.If(c, 0, 1) for c in cells2])
         )
         return sum == sum2
+
+    def predicat_nb_more_zone(
+        self, cell_indices: list[tuple], cell_indices2: list[tuple], role: Status, nb: int
+    ):
+        """Return rule to assign nb more roles in cells than cells2"""
+        print(f"MORE")
+        cells = [self.grid[c[0], c[1]] for c in cell_indices]
+        cells2 = [self.grid[c[0], c[1]] for c in cell_indices2]
+        sum = (
+            z3.Sum([z3.If(c, 1, 0) for c in cells])
+            if role == Status.INNOCENT
+            else z3.Sum([z3.If(c, 0, 1) for c in cells])
+        )
+        sum2 = (
+            z3.Sum([z3.If(c, 1, 0) for c in cells2])
+            if role == Status.INNOCENT
+            else z3.Sum([z3.If(c, 0, 1) for c in cells2])
+        )
+        return sum == sum2 + nb
 
     def split_roles_in_zone(self, zone, zone_role, role):
         """Return rule that assigns all the roles cells to to one part of a zone"""  # pire commentaire
@@ -433,9 +446,6 @@ class TC_5(Clue):
     def get_rule(self):
         cells = self.axis.cells(self.coord)
         cells2 = self.axis.cells(self.coord2)
-        print(self.axis)
-        print(cells)
-        print(cells2)
         return self.predicat_as_many(cells, cells2, self.role, self.role)
 
 
@@ -547,8 +557,6 @@ class TE_1(Clue):
         super().__init__(tree, name, people, grid)
 
     def get_rule(self):
-        print(f"{self.job = }")
-        print(f"{self.job2 = }")
         cells = self.job_to_cells(self.job)
         cells2 = self.job_to_cells(self.job2)
         return self.predicat_less(cells2, cells, self.role2, self.role)
@@ -559,8 +567,6 @@ class TE_2(Clue):
         super().__init__(tree, name, people, grid)
 
     def get_rule(self):
-        print(f"{self.job = }")
-        print(f"{self.job2 = }")
         cells = self.job_to_cells(self.job)
         cells2 = self.job_to_cells(self.job2)
         return self.predicat_less(cells, cells2, self.role, self.role2)
@@ -571,24 +577,52 @@ class TE_3(Clue):
         super().__init__(tree, name, people, grid)
 
     def get_rule(self):
-        print(f"{self.job = }")
-        print(f"{self.job2 = }")
         cells = self.job_to_cells(self.job)
         cells2 = self.job_to_cells(self.job2)
         return self.predicat_as_many(cells, cells2, self.role, self.role2)
 
 
-# class TMP_2(Clue):
-#     def __init__(self, tree, name, people, grid):
-#         super().__init__(tree, name, people, grid)
-#
-#     def get_rule(self):
-#         cells = self.neighbors(self.name)
-#         cells2 = self.neighbors(self.name2)
-#         return self.parity_as_many(inter, self.parity, self.role)
+class TF_1(Clue):
+    def __init__(self, tree, name, people, grid):
+        super().__init__(tree, name, people, grid)
+
+    def get_rule(self):
+        cells = self.pos_to_cells(self.pos)
+        return z3.And([self.predicat(self.neighbors(c), 0, self.role) for c in cells])
+
+
+class TMP_2(Clue):
+    def __init__(self, tree, name, people, grid):
+        super().__init__(tree, name, people, grid)
+
+    def get_rule(self):
+        cells = self.neighbors(self.name)
+        cells2 = self.neighbors(self.name2)
+        return self.predicat_nb_more_zone(cells2, cells, self.role, self.nb)
+
+
+class TMP_3(Clue):
+    def __init__(self, tree, name, people, grid):
+        super().__init__(tree, name, people, grid)
+
+    def get_rule(self):
+        cells = self.neighbors(self.name)
+        cells2 = self.neighbors(self.name2)
+        return self.predicat_nb_more_zone(cells, cells2, self.role, self.nb)
 
 
 class TMP_4(Clue):
+    def __init__(self, tree, name, people, grid):
+        super().__init__(tree, name, people, grid)
+
+    def get_rule(self):
+        cells = self.neighbors(self.name)
+        cells2 = self.pos_to_cells(self.pos)
+        inter = Cell.intersection(cells, cells2)
+        return self.parity_in_zone(inter, self.parity, self.role)
+
+
+class TMP_5(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
 
@@ -636,6 +670,16 @@ class TMP_9(Clue):
         return self.predicat(inter, self.nb, self.role)
 
 
+class TMP_10(Clue):
+    def __init__(self, tree, name, people, grid):
+        super().__init__(tree, name, people, grid)
+
+    def get_rule(self):
+        cells = self.pos_to_cells(self.pos)
+        zone_dir = list(Cell.zone_directly_dir(cells, self.dir).values())
+        return self.predicat(zone_dir, self.nb, self.role)
+
+
 class TMP_11(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
@@ -644,6 +688,34 @@ class TMP_11(Clue):
         cells = self.job_to_cells(self.job)
         zone_dir = list(Cell.zone_directly_dir(cells, self.dir).values())
         return self.predicat(zone_dir, self.nb, self.role)
+
+
+class TMP_14(Clue):
+    def __init__(self, tree, name, people, grid):
+        super().__init__(tree, name, people, grid)
+
+    def get_rule(self):
+        cells = self.job_to_cells(self.job)
+        return self.predicat(cells, len(cells), self.role)
+
+
+class TMP_15(Clue):
+    def __init__(self, tree, name, people, grid):
+        super().__init__(tree, name, people, grid)
+
+    def get_rule(self):
+        cells = self.neighbors(self.name)
+        return self.predicat_more_eq(cells, self.nb, self.role)
+
+
+class TMP_17(Clue):
+    def __init__(self, tree, name, people, grid):
+        super().__init__(tree, name, people, grid)
+
+    def get_rule(self):
+        cells = self.neighbors(self.name)
+        cells2 = self.neighbors(self.name2)
+        return self.predicat_as_many(cells, cells2, self.role)
 
 
 class TMP_18(Clue):
@@ -690,6 +762,43 @@ class TMP_19(Clue):
         )
 
 
+class TMP_20(Clue):
+    def __init__(self, tree, name, people, grid):
+        super().__init__(tree, name, people, grid)
+
+    def get_rule(self):
+        name_cell = self.name_to_cell(self.name)
+        cells = self.neighbors(self.name)
+        return z3.And(
+            [self.predicat(cells, self.nb, self.role)]
+            + [
+                self.predicat_neq(Cell.neighbors(c), self.nb, self.role)
+                for c in Cell.all_cells()
+                if c != name_cell
+            ]
+        )
+
+
+class TMP_21(Clue):
+    def __init__(self, tree, name, people, grid):
+        super().__init__(tree, name, people, grid)
+
+    def get_rule(self):
+        cells = self.pos_to_cells(self.pos)
+        return z3.And(
+            [self.predicat_less(Cell.neighbors(c), self.nb + 1, self.role) for c in cells]
+        )
+
+
+class TMP_22(Clue):
+    def __init__(self, tree, name, people, grid):
+        super().__init__(tree, name, people, grid)
+
+    def get_rule(self):
+        cells = self.pos_to_cells(self.pos)
+        return z3.And([self.predicat_more_eq(Cell.neighbors(c), self.nb, self.role) for c in cells])
+
+
 class TMP_23(Clue):
     def __init__(self, tree, name, people, grid):
         super().__init__(tree, name, people, grid)
@@ -698,11 +807,6 @@ class TMP_23(Clue):
         cells = self.pos_to_cells(self.pos)
         neighbors = [Cell.neighbors(c) for c in cells]
         combs = list(combinations(neighbors, self.nb))
-        print(f"{cells = }")
-        print(f"{neighbors = }")
-        print(f"{combs = }")
-        print(f"{self.nb = }")
-        print(f"{self.nb2 = }")
         return z3.Or(
             [
                 z3.And(

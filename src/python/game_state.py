@@ -19,6 +19,11 @@ class Cell:
         return f"{chr(ord('A') + coords[0] - 1)}{coords[1]}"
 
     @staticmethod
+    def all_cells() -> list[tuple]:
+        """Get all cells in the grid"""
+        return [(i, j) for i in Column.range() for j in Row.range()]
+
+    @staticmethod
     def neighbors(coords: str) -> list[tuple]:
         """Get coordinates of cells neighboring a cell"""
         return [
