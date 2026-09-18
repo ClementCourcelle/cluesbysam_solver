@@ -1,8 +1,11 @@
+from lark import Tree
+
 NB_ROWS = 5
 NB_COLS = 4
 
 
 class Cell:
+    people = None
 
     @staticmethod
     def id_to_coords(id: str) -> tuple:
@@ -15,12 +18,79 @@ class Cell:
         return f"{chr(ord('A') + coords[0] - 1)}{coords[1]}"
 
     @staticmethod
+    def dir_of_name(name: str, direction: str) -> list[tuple]:
+        """Get the cells in a direction of a person"""
+        return Cell.dir[direction](Cell.id_to_coords(Cell.people[name].id))
+
+    @staticmethod
+    def neighbors(name: str) -> list[tuple]:
+        """Get cells neighboring of person"""
+        return Cell.neighbors_from_coords(Cell.id_to_coords(Cell.people[name].id))
+
+    @staticmethod
+    def name_to_cell(name: str) -> tuple:
+        """Get cell coordinate of person"""
+        return Cell.id_to_coords(Cell.people[name].id)
+
+    @staticmethod
+    def job_to_cells(job: str) -> list[tuple]:
+        """Get cells of person with job"""
+        return [Cell.id_to_coords(p.id) for p in Cell.people.values() if p.profession == job]
+
+    @staticmethod
+    def pos_to_cells(pos: Tree) -> list[tuple]:
+        """Get cells from position tree"""
+        type = pos.data
+        print(pos)
+        match (type):
+            case 'in_axis':
+                axis_tree = pos.children[0]
+                if axis_tree.children[0].type == "AXIS":
+                    axis_type = Row if axis_tree.children[0].value == "row" else Column
+                    value = axis_tree.children[1].value
+                else:
+                    id = Cell.people[axis_tree.children[0]].id
+                    if axis_tree.children[1].value == "row":
+                        axis_type = Row
+                        value = id[1]
+                    else:
+                        axis_type = Column
+                        value = id[0]
+                axis_coord = ord(value) - ord('a') + 1 if value.isalpha() else int(value)
+                print(f"{axis_coord = }")
+                return axis_type.cells(axis_coord)
+            case 'on_the_edges':
+                return Cell.edges()
+            case 'in_a_corner':
+                return Cell.corners()
+            case 'neighboring_name':
+                name = pos.children[0].value
+                return Cell.neighbors(name)
+            case 'in_between_names':
+                id1 = Cell.people[pos.children[0].value].id
+                id2 = Cell.people[pos.children[1].value].id
+                vertical = Cell.id_to_coords(id1)[0] == Cell.id_to_coords(id2)[0]
+
+                first = Cell.id_to_coords(id1 if id1 < id2 else id2)
+                sec = Cell.id_to_coords(id1 if first == id1 else id2)
+
+                return (
+                    Cell.intersection(Cell.below(first), Cell.above(sec))
+                    if vertical
+                    else Cell.intersection(Cell.right(first), Cell.left(sec))
+                )
+            case 'dir_of_name':
+                dir = pos.children[0].value
+                name = pos.children[1].value
+                return Cell.dir_of_name(name, dir)
+
+    @staticmethod
     def all_cells() -> list[tuple]:
         """Get all cells in the grid"""
         return [(i, j) for i in Column.range() for j in Row.range()]
 
     @staticmethod
-    def neighbors(coords: str) -> list[tuple]:
+    def neighbors_from_coords(coords: str) -> list[tuple]:
         """Get coordinates of cells neighboring a cell"""
         return [
             (i, j)

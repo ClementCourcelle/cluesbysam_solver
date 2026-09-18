@@ -85,6 +85,7 @@ async def main() -> None:
     await GS.start()
 
     people = await GS.get_grid_state()
+    Cell.people = people
     parser = load_parser([p for p in people.keys()], [p.profession for p in people.values()])
     seen_clues: set[str] = set()
     z3_grid = {(i, j): z3.Bool(f"c_{i} r_{j}") for i in Column.range() for j in Row.range()}
@@ -118,7 +119,7 @@ async def main() -> None:
                 print(f"Not a clue: {people[name].clue}")
                 continue
             clue_type = tree.data.upper()
-            solver.add(Clue.types[clue_type](tree, name, people).get_rule())
+            solver.add(Clue.types[clue_type](tree, name).get_rule())
             seen_clues.add(name)
         new_clues.clear()
 
@@ -156,43 +157,43 @@ async def main() -> None:
             print("No solution found !")
 
         # End
-        for i in new_inn:
-            id = Cell.coords_to_id(i)
-            await GS.mark_id(id, Status.INNOCENT)
-            print(f"clicked {id} inn")
-        new_inn.clear()
-
-        for c in new_crim:
-            id = Cell.coords_to_id(c)
-            await GS.mark_id(id, Status.CRIMINAL)
-            print(f"clicked {id} crim")
-        new_crim.clear()
-
-        if len(known_cells) == len(z3_grid):
-            print("Done !")
-            time.sleep(30)
-            break
+        # for i in new_inn:
+        #     id = Cell.coords_to_id(i)
+        #     await GS.mark_id(id, Status.INNOCENT)
+        #     print(f"clicked {id} inn")
+        # new_inn.clear()
+        #
+        # for c in new_crim:
+        #     id = Cell.coords_to_id(c)
+        #     await GS.mark_id(id, Status.CRIMINAL)
+        #     print(f"clicked {id} crim")
+        # new_crim.clear()
+        #
+        # if len(known_cells) == len(z3_grid):
+        #     print("Done !")
+        #     time.sleep(30)
+        #     break
 
         # # Don't end
-        # if len(known_crim) + len(known_inn) != len(z3_grid):
-        #     for i in new_inn:
-        #         id = Cell.coords_to_id(i)
-        #         await GS.mark_id(id, Status.INNOCENT)
-        #         print(f"clicked {id} inn")
-        #     new_inn.clear()
-        #
-        #     for c in new_crim:
-        #         id = Cell.coords_to_id(c)
-        #         await GS.mark_id(id, Status.CRIMINAL)
-        #         print(f"clicked {id} crim")
-        #     new_crim.clear()
-        #
-        #     if len(known_crim) + len(known_inn) == len(z3_grid):
-        #         print("Done !")
-        #         break
-        #
-        # else:
-        #     time.sleep(30)
+        if len(known_cells) != len(z3_grid):
+            for i in new_inn:
+                id = Cell.coords_to_id(i)
+                await GS.mark_id(id, Status.INNOCENT)
+                print(f"clicked {id} inn")
+            new_inn.clear()
+
+            for c in new_crim:
+                id = Cell.coords_to_id(c)
+                await GS.mark_id(id, Status.CRIMINAL)
+                print(f"clicked {id} crim")
+            new_crim.clear()
+
+            if len(known_cells) == len(z3_grid):
+                print("Done !")
+                break
+
+        else:
+            time.sleep(30)
 
 
 # async def main() -> None:
