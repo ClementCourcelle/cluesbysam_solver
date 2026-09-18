@@ -4,7 +4,7 @@ from pathlib import Path
 
 from lark import Lark
 
-GRAMMAR_DIR = Path(__file__).parent.parent / "grammar"
+GRAMMAR_DIR = Path(__file__).parent.parent.parent / "grammar"
 
 
 def cell_to_lark(cell: str) -> str:
@@ -18,7 +18,6 @@ def build_grammar(person_names: list[str], professions: list[str]) -> str:
     base += (GRAMMAR_DIR / "clue_types.lark").read_text()
 
     names_lower = [n.lower() for n in person_names]
-    # names_s = " | ".join(f'"{n}\'s"' for n in names_lower)
     names = " | ".join(f'"{n}"' for n in names_lower) + ' | "me" | "i"'
     jobs = " | ".join(f'"{p}"' for p in sorted({p.lower() for p in professions}))
 
