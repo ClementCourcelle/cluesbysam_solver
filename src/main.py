@@ -4,6 +4,7 @@ from sortedcontainers import SortedSet
 
 from lark import UnexpectedInput
 import z3
+import click
 
 from utils import GameScraper
 from grammar import load_parser, preprocess_clue
@@ -12,7 +13,7 @@ from interpreter.constraints import Constraint
 from game_elements import Row, Column, Status, Cell
 
 
-async def main() -> None:
+async def solve(interrupt: bool) -> None:
     GS = GameScraper(headless=False)
     await GS.start()
 
@@ -63,7 +64,6 @@ async def main() -> None:
                 for is_inn in [True, False]:
                     solver.push()
                     solver.add(z3_grid[tested_case] == is_inn)
-                    # print(self.solver)
                     if solver.check() == z3.sat:
                         solver.pop()
                         continue
@@ -80,10 +80,18 @@ async def main() -> None:
                     known_cells.update(new_crim)
                     print(f"{new_inn = }")
                     print(f"{new_crim = }")
-                    print("\n\n\n")
 
         if not new_inn and not new_crim:
             print("No solution found !")
+            break
+
+        if interrupt and len(known_cells) == len(z3_grid):
+            print(
+                f"\nInterrupting before completion.\n"
+                f"Last innocents: {new_inn if new_inn else ""}\n"
+                f"Last criminals: {new_crim if new_crim else ""}"
+            )
+            break
 
         for i in new_inn:
             id = Cell.coords_to_id(i)
@@ -98,10 +106,19 @@ async def main() -> None:
         new_crim.clear()
 
         if len(known_cells) == len(z3_grid):
-            print("Done !")
-            time.sleep(30)
+            print("Puzzle solved !")
             break
+
+    await GS.user_stop()
+
+
+@click.command()
+@click.option(
+    "--interrupt", '-i', is_flag=True, help="Ends before completing last step of the puzzle."
+)
+def main(interrupt):
+    asyncio.run(solve(interrupt))
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()

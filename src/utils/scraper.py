@@ -40,6 +40,10 @@ class GameScraper:
         if self.playwright:
             await self.playwright.stop()
 
+    async def user_stop(self):
+        """Wait for user to close the browser."""
+        await self.page.wait_for_event("close", timeout=0)
+
     async def get_grid_state(self) -> List[Person]:
         """Scrape the current state of all 20 people."""
         people = {}
