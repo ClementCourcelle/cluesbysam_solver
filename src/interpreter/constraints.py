@@ -40,7 +40,7 @@ class Constraint:
         return (
             z3.Sum([z3.If(c, 1, 0) for c in cells]) < n
             if role == Status.INNOCENT
-            else z3.Sum([z3.If(c, 1, 0) for c in cells]) >= len(cells) - n
+            else z3.Sum([z3.If(c, 1, 0) for c in cells]) > len(cells) - n
         )
 
     @staticmethod
@@ -54,7 +54,7 @@ class Constraint:
         return (
             z3.Sum([z3.If(c, 1, 0) for c in cells]) >= n
             if role == Status.INNOCENT
-            else z3.Sum([z3.If(c, 1, 0) for c in cells]) < len(cells) - n
+            else z3.Sum([z3.If(c, 1, 0) for c in cells]) <= len(cells) - n
         )
 
     @staticmethod

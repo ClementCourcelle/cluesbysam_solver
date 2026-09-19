@@ -46,3 +46,4 @@ clue: _nb "of the" _nb _role pos _BE _super_pos -> t_1
   | "no one" pos _HAVE "more than" _nb _role _NGH -> t_44
   | "no one" pos _HAVE "less than" _nb _role _NGH -> t_45
   | _nb _PERSON pos _HAVE _nb _role _NGH -> t_46
+  | _THERE _nb_no _role pos "who neighbor" NAME -> t_47

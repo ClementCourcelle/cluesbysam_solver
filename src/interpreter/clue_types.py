@@ -298,18 +298,18 @@ class T_24(Clue):
         )
 
 
-class T_25(Clue):  # TODO: Fix
+class T_25(Clue):
     def get_rule(self):
         cells = Cell.job_to_cells(self.job)
         cells2 = Cell.job_to_cells(self.job2)
-        return predicat_less(cells2, cells, self.role2, self.role)
+        return predicat_more_zone(cells2, cells, self.role2, self.role)
 
 
-class T_26(Clue):  # TODO: Fix
+class T_26(Clue):
     def get_rule(self):
         cells = Cell.job_to_cells(self.job)
         cells2 = Cell.job_to_cells(self.job2)
-        return predicat_less(cells, cells2, self.role, self.role2)
+        return predicat_more_zone(cells, cells2, self.role, self.role2)
 
 
 class T_27(Clue):
@@ -406,11 +406,11 @@ class T_39(Clue):
         return predicat_more_eq(cells, self.nb, self.role)
 
 
-class T_40(Clue):  # TODO: fix
+class T_40(Clue):
     def get_rule(self):
         cells = Cell.neighbors(self.name)
         cells2 = Cell.neighbors(self.name2)
-        return predicat_as_many(cells, cells2, self.role)
+        return predicat_as_many(cells, cells2, self.role, self.role)
 
 
 class T_41(Clue):
@@ -495,3 +495,11 @@ class T_46(Clue):
                 for comb in combs
             ]
         )
+
+
+class T_47(Clue):
+    def get_rule(self):
+        cells = Cell.pos_to_cells(self.pos)
+        cells2 = Cell.neighbors(self.name)
+        inter = Cell.intersection(cells, cells2)
+        return predicat(inter, self.nb, self.role)

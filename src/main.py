@@ -85,44 +85,22 @@ async def main() -> None:
         if not new_inn and not new_crim:
             print("No solution found !")
 
-        # End
-        # for i in new_inn:
-        #     id = Cell.coords_to_id(i)
-        #     await GS.mark_id(id, Status.INNOCENT)
-        #     print(f"clicked {id} inn")
-        # new_inn.clear()
-        #
-        # for c in new_crim:
-        #     id = Cell.coords_to_id(c)
-        #     await GS.mark_id(id, Status.CRIMINAL)
-        #     print(f"clicked {id} crim")
-        # new_crim.clear()
-        #
-        # if len(known_cells) == len(z3_grid):
-        #     print("Done !")
-        #     time.sleep(30)
-        #     break
+        for i in new_inn:
+            id = Cell.coords_to_id(i)
+            await GS.mark_id(id, Status.INNOCENT)
+            print(f"clicked {id} inn")
+        new_inn.clear()
 
-        # # Don't end
-        if len(known_cells) != len(z3_grid):
-            for i in new_inn:
-                id = Cell.coords_to_id(i)
-                await GS.mark_id(id, Status.INNOCENT)
-                print(f"clicked {id} inn")
-            new_inn.clear()
+        for c in new_crim:
+            id = Cell.coords_to_id(c)
+            await GS.mark_id(id, Status.CRIMINAL)
+            print(f"clicked {id} crim")
+        new_crim.clear()
 
-            for c in new_crim:
-                id = Cell.coords_to_id(c)
-                await GS.mark_id(id, Status.CRIMINAL)
-                print(f"clicked {id} crim")
-            new_crim.clear()
-
-            if len(known_cells) == len(z3_grid):
-                print("Done !")
-                break
-
-        else:
+        if len(known_cells) == len(z3_grid):
+            print("Done !")
             time.sleep(30)
+            break
 
 
 if __name__ == "__main__":
