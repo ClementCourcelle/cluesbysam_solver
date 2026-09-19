@@ -10,9 +10,11 @@ requires-python = ">=3.9"
 dependencies = [
     # tes dépendances ici, ex: "requests>=2.28.0"
     "z3-solver",
+    "lark",
     "playwright",
     "pydantic",
-    "click"
+    "click",
+    "sortedcontainers"
 ]
 
 [tool.setuptools.packages.find]
