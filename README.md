@@ -1,4 +1,4 @@
-Python program to solve today's [Clues by Sam](cluesbysam.com) puzzle.
+Python program to solve today's [Clues by Sam](https://cluesbysam.com) puzzle.
 
 ### Install
 Download this project:
@@ -31,4 +31,4 @@ python3 src/main.py
 If you use it multiple times, you can use `-i` option to interrupt the program before completing the last step to not mess with the website statistics.
 
 ### Note
-The program to update the clues grammar do not work anymore.
+The program to update the clues grammar does not work anymore.
