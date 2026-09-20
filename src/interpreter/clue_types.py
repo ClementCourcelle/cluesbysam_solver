@@ -503,3 +503,9 @@ class T_47(Clue):
         cells2 = Cell.neighbors(self.name)
         inter = Cell.intersection(cells, cells2)
         return predicat(inter, self.nb, self.role)
+
+
+class T_48(Clue):
+    def get_rule(self):
+        cells = Cell.all_cells()
+        return predicat(cells, self.nb, self.role)
