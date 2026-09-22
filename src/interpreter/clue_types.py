@@ -276,24 +276,24 @@ class T_22(Clue):
 
 class T_23(Clue):
     def get_rule(self):
-        cells = self.axis.cells(self.axis_coord)
+        cells = self.axis.cells(self.coord)
         return z3.And(
             [
                 predicat_more_zone(self.axis.cells(self.coord), self.axis.cells(other), self.role)
                 for other in self.axis.range()
-                if other != self.axis_coord
+                if other != self.coord
             ]
         )
 
 
 class T_24(Clue):
     def get_rule(self):
-        cells = self.axis.cells(self.axis_coord)
+        cells = self.axis.cells(self.coord)
         return z3.And(
             [
                 predicat_more_zone(self.axis.cells(other), self.axis.cells(self.coord), self.role)
                 for other in self.axis.range()
-                if other != self.axis_coord
+                if other != self.coord
             ]
         )
 
