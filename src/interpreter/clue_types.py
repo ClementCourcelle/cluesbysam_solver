@@ -382,7 +382,7 @@ class T_35(Clue):
 
 class T_36(Clue):
     def get_rule(self):
-        cells = Cell.pos_to_cells(self.pos)
+        cells = Cell.job_to_cells(self.job)
         zone_dir = list(Cell.zone_directly_dir(cells, self.dir).values())
         return predicat(zone_dir, self.nb, self.role)
 
