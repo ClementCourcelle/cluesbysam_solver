@@ -14,8 +14,9 @@ from game_elements import Row, Column, Status, Cell
 
 
 class GameEngine:
-    def __init__(self, interrupt: bool):
+    def __init__(self, interrupt: bool, step: bool):
         self.interrupt = interrupt
+        self.step = step
         self.GS = GameScraper(headless=False)
         self.solver = z3.Solver()
         self.known_cells = SortedSet()
@@ -96,11 +97,15 @@ class GameEngine:
 
     async def mark_new_people(self, new_inn, new_crim):
         for i in new_inn:
+            if self.step:
+                input("\nEnter to continue...")
             id = Cell.coords_to_id(i)
             await self.GS.mark_id(id, Status.INNOCENT)
             print(f"clicked {id} inn")
 
         for c in new_crim:
+            if self.step:
+                input("\nEnter to continue...")
             id = Cell.coords_to_id(c)
             await self.GS.mark_id(id, Status.CRIMINAL)
             print(f"clicked {id} crim")
@@ -131,8 +136,8 @@ class GameEngine:
         await self.GS.user_stop()
 
 
-async def start(interrupt: bool) -> None:
-    engine = GameEngine(interrupt)
+async def start(interrupt: bool, step: bool) -> None:
+    engine = GameEngine(interrupt, step)
     await engine.solve()
 
 
@@ -140,8 +145,9 @@ async def start(interrupt: bool) -> None:
 @click.option(
     "--interrupt", '-i', is_flag=True, help="Ends before completing last step of the puzzle."
 )
-def main(interrupt):
-    asyncio.run(start(interrupt))
+@click.option("--step", '-s', is_flag=True, help="waits for user input before each reveal")
+def main(interrupt, step):
+    asyncio.run(start(interrupt, step))
 
 
 if __name__ == "__main__":
