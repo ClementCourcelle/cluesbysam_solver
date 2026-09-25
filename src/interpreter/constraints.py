@@ -8,6 +8,8 @@ class Constraint:
     @staticmethod
     def predicat(cell_indices: list[tuple], n: int, role=Status.INNOCENT):
         """Return rule to assign number of roles to a zone"""
+        if role == Status.INNOCENT:
+            print(f"SIMPLE: {n} in {cell_indices} ")
         cells = [Constraint.grid[c[0], c[1]] for c in cell_indices]
         return (
             z3.Sum([z3.If(c, 1, 0) for c in cells]) == n
@@ -32,7 +34,7 @@ class Constraint:
     @staticmethod
     def predicat_less(cell_indices: list[tuple], n: int, role=Status.INNOCENT):
         """Return rule to assign maximum number of roles to a zone"""
-        print(f"MORE")
+        print(f"LESS")
         print(f"{cell_indices = }")
         print(f"{n = }")
         print(f"{role = }")
@@ -46,7 +48,7 @@ class Constraint:
     @staticmethod
     def predicat_more_eq(cell_indices: list[tuple], n: int, role=Status.INNOCENT):
         """Return rule to assign minimum number of roles to a zone"""
-        print(f"MORE")
+        print(f"MORE OR EQ")
         print(f"{cell_indices = }")
         print(f"{n = }")
         print(f"{role = }")
@@ -60,7 +62,7 @@ class Constraint:
     @staticmethod
     def predicat_more_zone(cell_indices: list[tuple], cell_indices2: list[tuple], role: Status):
         """Return rule to assign more roles in cells than cells2"""
-        print(f"MORE")
+        print(f"MORE in {cell_indices} than {cell_indices2}")
         cells = [Constraint.grid[c[0], c[1]] for c in cell_indices]
         cells2 = [Constraint.grid[c[0], c[1]] for c in cell_indices2]
         sum = (
@@ -100,7 +102,7 @@ class Constraint:
         cell_indices: list[tuple], cell_indices2: list[tuple], role: Status, nb: int
     ):
         """Return rule to assign nb more roles in cells than cells2"""
-        print(f"MORE")
+        print(f" {nb} MORE in {cell_indices} than {cell_indices2}")
         cells = [Constraint.grid[c[0], c[1]] for c in cell_indices]
         cells2 = [Constraint.grid[c[0], c[1]] for c in cell_indices2]
         sum = (
@@ -118,6 +120,7 @@ class Constraint:
     @staticmethod
     def split_roles_in_zone(zone, zone_role, role):
         """Return rule that assigns all the roles cells to to one part of a zone"""  # pire commentaire
+        print("SPLIT ROLES")
         print(f"{zone = }")
         print(f"{zone_role = }")
         print("!! AND !!")
@@ -136,4 +139,6 @@ class Constraint:
     def parity_in_zone(cell_indices: list[tuple], parity: str, role=Status.INNOCENT):
         """Return rules with possible role values based on parity"""  # 3e pire commentaire
         start = 0 if parity == 'even' else 1
-        return Constraint.or_range_predicat(cell_indices, range(start, len(cell_indices), 2), role)
+        return Constraint.or_range_predicat(
+            cell_indices, range(start, len(cell_indices) + 1, 2), role
+        )
